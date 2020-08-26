@@ -46,21 +46,37 @@ Route::resource('/pagecarsspecialiste/parentts','carsSpecialiste\ParenttControll
 Route::get('/pagecarsspecialiste/diagnostics/create', 'carsSpecialiste\DiagnosticController@create')->name('pagecarsspecialiste');
 Route::get('/pagecarsspecialiste/diagnostics/affiche/{id_enfant}', 'CarsSpecialiste\DiagnosticController@affiche')->name('pagecarsspecialiste.affiche');
 Route::get('/pagecarsspecialiste/diagnostics/show/{id}', 'carsSpecialiste\DiagnosticController@show')->name('pagecarsspecialiste.show');
-Route::post('/pagecarsspecialiste/diagnostics/storeAffiche', 'carsSpecialiste\DiagnosticController@storeAffiche')->name('pagecarsspecialiste.storeAffiche');
+//Route::post('/pagecarsspecialiste/diagnostics/storeAffiche', 'carsSpecialiste\DiagnosticController@storeAffiche')->name('pagecarsspecialiste.storeAffiche');
 //Route::get('/pagecarsspecialiste/diagnostics/action', 'carsSpecialiste\DiagnosticController@action')->name('live_search.action');
 //Route::get('/pagecarsspecialiste/diagnostics/pdf', 'carsSpecialiste\DiagnosticController@pdf');
+Route::post('/pagecarsspecialiste/update/{idDiagnostic}', 'carsSpecialiste\DiagnosticController@update');
+//Route::post('/pagecarsspecialiste/update/{idDiagnostic}', 'carsSpecialiste\DiagnosticController@update');
+
 Route::resource('/pagecarsspecialiste/diagnostics','carsSpecialiste\DiagnosticController',['as'=>'pagecarsspecialiste']);
+Route::post('/pagecarsspecialiste/diagnostics/store', 'carsSpecialiste\DiagnosticController@store');
+Route::post('/pagecarsspecialiste/diagnostics/storeAffiche', 'carsSpecialiste\DiagnosticController@storeAffiche');
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /// ///////////////////////////////pour TRAITANT////////////////////////////////////////
 Route::get('/pagetraitant', 'Traitant\SeancetraitementController@create')->name('pagetraitant');
 //Route::resource('/pagetraitant/enfants','Traitant\EnfantController',['as'=>'pagetraitant']);
+Route::get('/pagetraitant/seancetraitements/chart/{enf}', 'Traitant\SeancetraitementController@chart')->name('charrt');
+/**************************quiz*********************/
+Route::get('/pagetraitant/seancetraitements/quiz/quizJobs/{appenf}', 'Traitant\SeancetraitementController@quizJobs')->name('quizJobs');
+Route::get('/pagetraitant/seancetraitements/quiz/quizColors/{appenf}', 'Traitant\SeancetraitementController@quizColors')->name('quizColors');
+Route::get('/pagetraitant/seancetraitements/quiz/quizFormes/{hawayanetenf}', 'Traitant\SeancetraitementController@quizFormes')->name('quizFormes');
+Route::get('/pagetraitant/seancetraitements/quiz/memoryGame/{appenf}', 'Traitant\SeancetraitementController@memoryGame')->name('memoryGame');
+Route::get('/pagetraitant/seancetraitements/quiz/quizFruits/{appenf}', 'Traitant\SeancetraitementController@quizFruits')->name('quizFruits');
+Route::get('/pagetraitant/seancetraitements/quiz/quizDirections/{appenf}', 'Traitant\SeancetraitementController@quizDirections')->name('quizDirections');
+Route::get('/pagetraitant/seancetraitements/quiz/quizAnimals/{hawayanetenf}', 'Traitant\SeancetraitementController@quizAnimals')->name('quizAnimals');
+/**************************quiz*********************/
 Route::get('/pagetraitant/seancetraitements/show2/{id_enfant}', 'Traitant\SeancetraitementController@show2')->name('pagetraitant.show2');
 Route::get('/pagetraitant/seancetraitements/traite/{id}', 'Traitant\SeancetraitementController@traite')->name('pagetraitant.traite');
 Route::get('/pagetraitant/seancetraitements/affihe/{idF}', 'Traitant\SeancetraitementController@affiche')->name('affiche');
 //Route::resource('pagetraitant','SeancetraitementController', array('only' => array('index','create','store','dossier')));
 Route::resource('/pagetraitant/seancetraitements','Traitant\SeancetraitementController',['as'=>'pagetraitant']);
 Route::resource('/pagetraitant/traitants','Traitant\TraitantsController',['as'=>'pagetraitant']);
+
 //Route::resource('/pagetraitant/seancetraitements','Traitant\SeancetraitementController',['as'=>'pagetraitant']);
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////Route::get('/admin/addchild', 'HomeController@index');

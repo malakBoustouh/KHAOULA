@@ -22,7 +22,7 @@ class CreateDiagnosticsTable extends Migration
             $table->integer('id_superviseur');
             $table->Date('dateDiagnostic');
             $table->text('niveau');
-            $table->text('remarque');
+            $table->text('remarque')->nullable();
             $table->timestamps();
         });
     }

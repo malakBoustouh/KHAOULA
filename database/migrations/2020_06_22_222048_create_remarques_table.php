@@ -15,8 +15,8 @@ class CreateRemarquesTable extends Migration
     {
         Schema::create('remarques', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('famille_id');
-            $table->foreign('famille_id')->references('id_famille')->on('familles')->onDelete('cascade');
+            $table->unsignedBigInteger('parentt_id');
+            $table->foreign('parentt_id')->references('id_parentt')->on('parentts')->onDelete('cascade');
             $table->date('dateRemarque')->nullable();
             $table->text('detail')->nullable();
             $table->timestamps();

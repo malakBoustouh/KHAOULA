@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Detail extends Model
 {
     protected $table="detail";
-    protected $fillable = ['diagnostic_id', 'questions', 'reponses', 'observations'];
+    protected $fillable = ['diagnostic_id', 'questions', 'reponses','numResponses', 'observations'];
 
     public function diagnostic()
     {

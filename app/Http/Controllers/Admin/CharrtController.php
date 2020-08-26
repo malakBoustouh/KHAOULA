@@ -29,8 +29,62 @@ class CharrtController extends Controller
         {
             $array[++$key] = [$value->sexe, $value->number];
         }
+        /*pie methode seance traitement*/
+        $dataMethode = DB::table('seanceTraitements')
+            ->select(
+                DB::raw('methode as methode'),
+                DB::raw('count(*) as number'))
+            ->groupBy('methode')
+            ->get();
+        $arrayMethode[] = ['Methode', 'Number'];
+        foreach($dataMethode as $key => $value)
+        {
+            $arrayMethode[++$key] = [$value->methode, $value->number];
+        }
 
-/*pie chart niveau*/
+
+        /*pie chart female*/
+        $data_female = \App\Diagnostic::join('enfants', 'diagnostics.enfant_id', '=', 'id_enfant')
+            ->selectRaw("niveau As female,count(*) as number")
+            ->where('sexe','=','أنثى')
+            ->groupBy('female')
+            ->get();
+        $arfemale[] = ['Female', 'Number'];
+        foreach($data_female as $key => $value)
+        {
+            $arfemale[++$key] = [$value->female, $value->number];
+        }
+
+        /*pie chart male*/
+        $data_male = \App\Diagnostic::join('enfants', 'diagnostics.enfant_id', '=', 'id_enfant')
+            ->selectRaw("niveau As male,count(*) as number")
+            ->where('sexe','=','ذكر')
+            ->groupBy('male')
+            ->get();
+        $armale[] = ['Female', 'Number'];
+        foreach($data_male as $key => $value)
+        {
+            $armale[++$key] = [$value->male, $value->number];
+        }
+
+
+
+       /* $visitor = DB::table('visitor')
+            ->select(
+                DB::raw("year(created_at) as year"),
+                DB::raw("SUM(click) as total_click"),
+                DB::raw("SUM(viewer) as total_viewer"))
+            ->orderBy("created_at")
+            ->groupBy(DB::raw("year(created_at)"))
+            ->get();
+
+
+        $result[] = ['Year','Click','Viewer'];
+        foreach ($visitor as $key => $value) {
+            $result[++$key] = [$value->year, (int)$value->total_click, (int)$value->total_viewer];
+        }*/
+
+        /*pie chart niveau*/
         $data_niveau = DB::table('diagnostics')
             ->select(
                 DB::raw('niveau as niveau'),
@@ -58,7 +112,19 @@ class CharrtController extends Controller
 
         }
 
+        /*chart year  DIAGNOSTIC*/
+        $dtayear = DB::table('seancetraitements')
+            ->select(
+                DB::raw('dateTraite as dateMonth'),
+                DB::raw('count(*) as number'))
+            ->groupBy('dateMonth')
+            ->get();
+        $arrayear[] = ['DateMonth', 'عدد المصابين'];
+        foreach($dtayear as $key => $value)
+        {
+            $arrayear[++$key] = [$value->dateMonth, (int)$value->number];
 
+        }
              /*chart year actuelle*/
         $chart_Month = Enfant::where(DB::raw("DATE_FORMAT(created_at,'%Y')"),date('Y'))->get();
         $chart = Charts::database( $chart_Month, 'bar', 'highcharts')
@@ -69,28 +135,15 @@ class CharrtController extends Controller
             ->groupByMonth(date('Y'));
         /*chart Age*/
         //$calculeAge=Carbon::parse($enfant->dateNaissance);
-        $ranges = [ // the start of each age-range.
-            '18-24' => 18,
-            '25-35' => 25,
-            '36-45' => 36,
-            '46+' => 46
-        ];
         $chartYear =  \DB::table('enfants')
             ->select( DB::raw('concat(2*floor(TIMESTAMPDIFF(YEAR,enfants.dateNaissance,CURDATE())/2), \'-\', 2*floor(TIMESTAMPDIFF(YEAR,enfants.dateNaissance,CURDATE())/2) + 1) as `range`, count(*) as `numberofusers`'))
+           ->orderby('range','asc')
             ->groupBy('range')
             ->get();
-
-        // $age=$calculeAge->age;
-      /*  $chartYear= DB::table('enfants')
-            ->select(
-                DB::raw('TIMESTAMPDIFF(YEAR,enfants.dateNaissance,CURDATE()) as age'),
-                DB::raw('count(*) as numberAge'))
-            ->groupBy( DB::raw('TIMESTAMPDIFF(YEAR,enfants.dateNaissance,CURDATE())'))
-            ->get();*/
         $arraAge[] = [' Range', 'عدد المصابين'];
         foreach($chartYear as $key => $value)
         {
-            $arraAge[++$key] = [$value->range, $value->numberofusers];
+            $arraAge[++$key] = [$value->range,(int) $value->numberofusers];
         }
 
         /*$chart_Age = Enfant::where(DB::raw('TIMESTAMPDIFF(YEAR,enfants.dateNaissance,CURDATE())'))->first();
@@ -101,7 +154,7 @@ class CharrtController extends Controller
             ->dimensions(1000, 500)
             ->responsive(false)
             ->groupByAge('age');*/
-        return view('admin.chart.index',compact('chart','chartAge'))->with('sexe', json_encode($array))->with('niveau', json_encode($ar))->with('year', json_encode($arra))->with('range', json_encode($arraAge));
+        return view('admin.chart.index',compact('chart','chartAge'))->with('methode', json_encode($arrayMethode))->with('sexe', json_encode($array))->with('dateMonth', json_encode( $arrayear))->with('male', json_encode($armale))->with('female', json_encode($arfemale))->with('niveau', json_encode($ar))->with('year', json_encode($arra))->with('range', json_encode($arraAge));
     }
 
 

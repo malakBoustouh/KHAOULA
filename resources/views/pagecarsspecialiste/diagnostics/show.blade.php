@@ -110,26 +110,33 @@
                                         <div class="row">
 
                                             <div class="col-md-12">
-                                                <br></br>
-
-                                                <div style="margin-right: 50px;font-size: 20px;">
+                                              <div class="text-center">
                                                 <img src="{{ asset('storage/enfants/'.$enfant->image) }}" class="center" style="border-radius: 8px;width: 150px;"/>
-                                               <br><br><br>
+                                              </div>
+                                                <div style="margin-right: 50px;">
+                                                    <br><br><br>
                                                     <i class="fa fa-paperclip"></i> <label>  المعلومات الخاصة:</label>
                                                     <div class="form-group" ><label> الإسم الكامل :</label>    {{$enfant->nom}} {{$enfant->prenom}}</div>
                                                     <div class="form-group"><label>العمر  :</label>{{ $age}} {{"سنة"}}</div>
                                                     <div class="form-group"><label>  الجنس :</label>{{$enfant->sexe}}</div>
                                                     <div class="form-group"><label>زمرة الدم:</label>{{ $enfant->groupage}}</div>
                                                     <div class="form-group"><label> العنوان:</label>{{ $enfant->domicile}}{{"-"}} {{ $enfant->commune}}{{"-"}} {{ $enfant->wilaya}}</div>
-                                                    <div class="form-group"><label> ابن:</label>{{$parent->prenomp}}</div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                    <div class="form-group"><label> ابن(ة):</label>{{$parent->prenomp}}</div>
+                                                        </div>
+                                                            <div class="col-md-6">
                                                     <div class="form-group"><label> رقم الهاتف الاب:</label>{{$parent->numTel}} </div>
-                                                    <div class="form-group"><label> وابن:</label>{{$parentt->prenomp}} {{$parentt->nomp}} </div>
-                                                    <div class="form-group"><label> رقم الهاتف الام:</label>{{$parentt->numTel}} </div>
-                                                    <br>
-                                                    <br>
-                                                    <i class="fa fa-paperclip"></i> <label>  معلومات كارز:</label>
-                                                    <div class="form-group"><label> تاريخ تطبيق المقياس  :</label>{{$diagnostic->dateDiagnostic}}
+                                                            </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                    <div class="form-group"><label> وابن(ة):</label>{{$parentt->prenomp}} {{$parentt->nomp}} </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                        <div class="form-group"><label> رقم الهاتف الام:</label>{{$parentt->numTel}} </div>
+                                                        </div></div>
+                                                    <i class="fa fa-paperclip"></i> <label>  معلومات كارز:</label>
                                                     <div class="form-group"><label> المشرفة  :</label>
                                                         @foreach($carsspecialistes as $t   )
                                                             @if($diagnostic->carsspecialiste_id==$t->id_carsspecialiste)
@@ -137,25 +144,78 @@
                                                             @endif
                                                         @endforeach
                                                     </div>
-                                                    <div class="form-group"><label > النتيجة  :</label>{{$diagnostic->niveau}}</div>
+                                                    <div class="form-group"><label> تاريخ تطبيق المقياس  :</label>{{$diagnostic->dateDiagnostic}}</div>
 
+                                                </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse0}}</label></div></div>
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question1}} :</label></div>
+                                                            <div class="form-group"><label class="container">=> {{$reponse1}}</label></div></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question2}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse2}}</label></div></div>
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question3}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse3}}</label></div></div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question14}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse14}}</label></div></div>
+
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question5}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse5}}</label></div></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question6}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse6}}</label></div></div>
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question7}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse7}}</label></div></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question8}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse8}}</label></div></div>
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question9}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse9}}</label></div></div>
+                                                    </div>
+                                                      <div class="row">
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question10}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse10}}</label></div></div>
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question11}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse11}}</label></div></div>
+                                                    </div>
+                                                         <div class="row">
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question12}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse12}}</label></div></div>
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question13}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse13}}</label></div></div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-md-6"><div class="form-group"><label class="container">{{$question4}} :</label></div>
+                                                            <div class="form-group"><label class="container"> =>{{$reponse4}}</label></div></div>
+                                                    </div>
+
+
+                                                    <div class="text-center" >  <label > ========================= النتيجة  :</label>{{$diagnostic->niveau}}<label >====================</label ></div>
+                                                    <footer>
+                                                        <p class="text-center">2020 &copy;رانا معاك</p>
+
+                                                    </footer>
+
+                                            </div>
                                                 </div>
                                             </div>
 
                                         </div>
 
                                     </div>
-                                  
-                                    <footer>
-                                        <p class="text-center">2020 &copy;رانا معاك</p>
-
-                                    </footer>
                                 </div>
 
                             </div>
 
-                        </div>
-                    </div>
+
 
 
 

@@ -1,7 +1,62 @@
 @extends('layouts.traitants')
 @section('title','| ملف الطفل')
 @section('content')
+    <head>
+        <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('https://www.gstatic.com/charts/loader.js')}}"></script>
+        <script type="text/javascript">
+            var analytics = <?php echo $month; ?>
 
+            google.charts.load('current', {'packages':['corechart']});
+
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart()
+            {
+                var data = google.visualization.arrayToDataTable(analytics);
+                var options = {
+                    title : 'منحنى تطور حالة الطفل في الحصص خلال العام',
+                    hAxis: {
+                        title: 'اشهر'
+                    },
+                    vAxis: {
+                        title: 'التقييم'
+                    },
+                    backgroundColor: '#f1f8e9'
+                };
+
+
+                var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
+                chart.draw(data, options);
+            }
+        </script>
+        <script type="text/javascript">
+            var analyticsdatejanvier = <?php echo $datejanvier; ?>
+
+            google.charts.load('current', {'packages':['corechart']});
+
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart()
+            {
+                var datadatejanvier = google.visualization.arrayToDataTable(analyticsdatejanvier);
+                var options = {
+                    title : 'منحنى تطور حالة الطفل في الحصص خلال شهر جانفي',
+                    hAxis: {
+                        title: 'شهر جانفي'
+                    },
+                    vAxis: {
+                        title: 'التقييم'
+                    },
+                    backgroundColor: '#f1f8e9'
+                };
+
+
+                var chart = new google.visualization.LineChart(document.getElementById('line_chartdatejanvier'));
+                chart.draw(datadatejanvier, options);
+            }
+        </script>
+    </head>
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -121,7 +176,7 @@
 
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 150px;">
-                                        <input type="text" name="table_search" class="form-control float-right" placeholder="بحث">
+                                        <input type="text" name="table_search" style="margin-right: 10px;width: 110px" class="form-control float-right" placeholder="بحث">
 
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
@@ -131,6 +186,8 @@
                                 <ul class="nav nav-pills">
                                     <li class="nav-item"><a class="nav-link active" href="#diagnostic" data-toggle="tab">التشخيص</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#prise" data-toggle="tab"> حصص المعالجة</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#remarque" data-toggle="tab">ملاحظات الاباء</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#statistique" data-toggle="tab">احصائيات</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#traite" data-toggle="tab" >إضافة حصة معالجة</a></li>
 
 
@@ -150,36 +207,36 @@
                                                             <p>{{ $message }}</p>
                                                         </div>
                                                     @endif
-                                                    <table class="table table-hover">
-                                                        <tr>
-                                                            <th>التاريخ</th>
-                                                            <th>المختص(ة)</th>
-                                                            <th>المشرف(ة)</th>
-                                                            <th>النتيجة</th>
-                                                        </tr>
-                                                        @if(count($diagnostic))
-                                                            @foreach($diagnostics as $h   )
-                                                                @if($enfant->id_enfant==$h->enfant_id)
-                                                                    <tr class='clickable-row'  data-href="{{route('affiche',$h->id)}}"  style="cursor: pointer;">
-                                                                        <td>{{$h->date}}</td>
-                                                                        @foreach($specialistes as $t   )
-                                                                            @if($h->specialiste_id==$t->id_specialiste)
-                                                                                <td value="{{$t->id_specialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
-                                                                            @endif
-                                                                        @endforeach
-                                                                        @foreach($specialistes as $t   )
-                                                                            @if($h->specialiste_id==$t->id_specialiste)
-                                                                                <td value="{{$t->id_specialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
-                                                                            @endif
-                                                                        @endforeach
-                                                                        <td>{{$h->niveau}}</td>
-                                                                    </tr>
-                                                                @endif
-                                                            @endforeach
-                                                        @else
-                                                            <tr><td colspan="7">لا يوجد معالجة</td></tr>
-                                                        @endif
-                                                    </table>
+                                                        <table class="table table-hover">
+                                                            <tr>
+                                                                <th>التاريخ</th>
+                                                                <th>المختص(ة)</th>
+                                                                <th>المشرف(ة)</th>
+                                                                <th>النتيجة</th>
+                                                            </tr>
+                                                            @if(count($diagnostic))
+                                                                @foreach($diagnostics as $h   )
+                                                                    @if($enfant->id_enfant==$h->enfant_id)
+                                                                        <tr class='clickable-row'  data-href="{{route('affiche',$h->id)}}"  style="cursor: pointer;">
+                                                                            <td>{{$h->dateDiagnostic}}</td>
+                                                                            @foreach($carsspecialistes as $t   )
+                                                                                @if($h->carsspecialiste_id==$t->id_carsspecialiste)
+                                                                                    <td value="{{$t->id_carsspecialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
+                                                                                @endif
+                                                                            @endforeach
+                                                                            @foreach($carsspecialistes as $t   )
+                                                                                @if($h->carsspecialiste_id==$t->id_carsspecialiste)
+                                                                                    <td value="{{$t->id_carsspecialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
+                                                                                @endif
+                                                                            @endforeach
+                                                                            <td>{{$h->niveau}}</td>
+                                                                        </tr>
+                                                                    @endif
+                                                                @endforeach
+                                                            @else
+                                                                <tr><td colspan="7">لا يوجد معالجة</td></tr>
+                                                            @endif
+                                                        </table>
 
                                                 </div>
                                                 <!-- /.card-body -->
@@ -238,6 +295,61 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="tab-pane" id="remarque">
+                                        <div class="post">
+                                            <div class="card">
+                                                <div class="card-body table-responsive p-0">
+                                                    <table class="table table-hover">
+                                                        <tr>
+                                                            <th>التاريخ</th>
+                                                            <th>الملاحظة</th>
+
+
+
+
+                                                        </tr >
+                                                        @if(count($remarque))
+
+                                                            @foreach($remarques as $s   )
+                                                                    <tr >
+
+
+                                                                        <td>{{ $s->dateRemarque}}</td>
+                                                                        <td>{{ $s->detail}}</td>
+
+                                                                    </tr>
+                                                            @endforeach
+                                                        @else
+                                                            <tr><td colspan="7">لا توجد ملاحظة</td></tr>
+                                                        @endif
+
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="statistique">
+                                        <div class="post">
+
+                                            <br><br>
+                                            <div class="row">
+
+                                                                <div class="col-md-6" >
+                                                                        <a  style="margin-right: 80px" href="{{route('charrt',$enfant->id_enfant)}}" class="btn btn-info" >احصائيات التطور في الحصص </a>
+
+                                                                </div>
+                                                <div class="col-md-6" >
+                                                                    <button  class="btn btn-info"  data-toggle="modal" data-target="#seance">احصائيات التطور في الالعاب التعليمية</button>
+                                                </div>
+
+                                            </div>
+                                            <br><br>
+
+
+
+
+                                        </div></div>
                                     <div class="tab-pane" id="traite">
                                         <div class="card">
                                             <div class="card-body table-responsive p-0">
@@ -335,10 +447,16 @@
 
                                                                     <div class="input-group">
                                                                         <select class="form-control" name="note">
-                                                                            <option note="لايوجد تحسن">لايوجد تحسن</option>
-                                                                            <option note="متوسط">متوسط</option>
-                                                                            <option note="جيد">جيد</option>
-                                                                            <option note="ممتاو">ممتاو</option>
+                                                                            <option note="1">1</option>
+                                                                            <option note="2">2</option>
+                                                                            <option note="3">3</option>
+                                                                            <option note="4">4</option>
+                                                                            <option note="5">5</option>
+                                                                            <option note="6">6</option>
+                                                                            <option note="7">7</option>
+                                                                            <option note="8">8</option>
+                                                                            <option note="9">9</option>
+                                                                            <option note="1O">10</option>
                                                                         </select>
 
                                                                     </div>
@@ -373,7 +491,49 @@
 
                                 </div>
                             </div>
-                </div></div> </section></div>
+
+
+
+                </div></div>
+            <!-- Modal -->
+            <div class="modal fade" id="seance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" style="margin-left: 4px;" id="myModalLabel"> الالعاب </h4>
+
+                            <button type="button" style="margin-right: 370px;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+
+                           <br><br>
+                        <div class="modal-body">
+                            <div class="panel-body" align="center">
+                                    <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizJobs',$enfant->id_enfant)}}"  >كويز المهن</a>
+                                <br><br>
+                            <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizAnimals',$enfant->id_enfant)}}" >كويز الحيوانات</a>
+                                <br><br>
+                            <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizColors',$enfant->id_enfant)}}"  >كويز الالوان</a>
+                                <br><br>
+                            <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizFormes',$enfant->id_enfant)}}"  >كويز الاشكال</a>
+                                <br><br>
+                            <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizFruits',$enfant->id_enfant)}}"  >كويز الفواكه</a>
+                                <br><br>
+                                <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizDirections',$enfant->id_enfant)}}"  >كويز الاتجاهات</a>
+                                <br><br>
+                                <a  class="btn  btn-success" style="width: 150px"  href="{{route('memoryGame',$enfant->id_enfant)}}"  >كويز لعبة الذاكرة</a>
+                            </div></div>
+                        <br><br>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">الغاء</button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section></div>
 
         <!-- /.content -->
 
@@ -421,6 +581,8 @@
             allowClear: false
         });
     </script>
+
+
     <!-- jQuery -->
 
     <script src="plugins/jquery/jquery.min.js"></script>

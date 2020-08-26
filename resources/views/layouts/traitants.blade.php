@@ -31,6 +31,13 @@
 
     <script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')}}"></script>
     <script src=" {{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js')}}"></script>
+
+
+    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js') }}"></script>
+    <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js') }}"></script>
+    <script src="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js') }}"></script>
+
+    <link rel="stylesheet" href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css')}}">
     <style>
         img {
             border-radius: 50%;
@@ -57,14 +64,14 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                         @if(\Illuminate\Support\Facades\Auth::user()->image)
-                            <img src="{{ asset('storage/traitants/'.\Illuminate\Support\Facades\Auth::user()->image) }}"  alt="Avatar" style="width:40px"/>
+                            <img src="{{ asset('storage/traitants/'.\Illuminate\Support\Facades\Auth::user()->image) }}"  alt="Avatar" style="width:70px;height: 50px"/>
                         @else
                         <img src="{{ asset('dist/img/admin.png') }}">
                         @endif
                     </div>
                     <div class="info">
                         <a href="#" class="d-block" >{{\Illuminate\Support\Facades\Auth::user()->name}}</a>
-                        <a href="#"><i class="fa fa-circle text-success"></i>عبر النت </a>
+                        <a href="#"><i class="fa fa-circle text-success"></i>متصل </a>
                     </div>
                 </div>
 
@@ -101,6 +108,11 @@
                             </a>
 
                         </li>
+
+
+
+
+                        <li class="nav-item">
                             <a href="{{ route('logout') }}" id="lien" class="nav-link @if($segment=='logout') active @endif" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                 <i class="nav-icon fa fa-sign-out"></i>

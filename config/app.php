@@ -158,7 +158,7 @@ return [
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
         Laravel\Tinker\TinkerServiceProvider::class,
-        //Laravel\Passport\PassportServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
         /*
          * Application Service Providers...
          */

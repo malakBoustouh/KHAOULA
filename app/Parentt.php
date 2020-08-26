@@ -17,6 +17,10 @@ class Parentt extends Model
     public function notifications(){
        return $this->hasMany('App\Notification');
     }
+    public function notificationtraits(){
+        return $this->hasMany('App\Notificationtrait');
+    }
+
 
     public function remarques(){
         return $this->hasMany('App\Remarque');

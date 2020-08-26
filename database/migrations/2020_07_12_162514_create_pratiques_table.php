@@ -20,6 +20,7 @@ class CreatePratiquesTable extends Migration
             $table->unsignedBigInteger('exercice_id');
             $table->foreign('exercice_id')->references('id_exercice')->on('exercices')->onDelete('cascade');
             $table->Date('datePratique');
+            $table->string('niveau');
             $table->integer('score');
 
             $table->timestamps();

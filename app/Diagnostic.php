@@ -5,7 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 class Diagnostic extends Model
 {
-    protected $fillable=['enfant_id','carsSpecialiste_id','dateDiagnostic','niveau','remarque','methode','id_superviseur'];
+    protected $fillable = [
+        'enfant_id',
+        'carsspecialiste_id',
+        'dateDiagnostic',
+        'niveau',
+        'remarque',
+        'methode',
+        'id_superviseur'
+    ];
+
     public function enfant(){
         return  $this->belongsTo('App\Enfant');
     }

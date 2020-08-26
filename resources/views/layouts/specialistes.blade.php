@@ -66,7 +66,7 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                         @if(\Illuminate\Support\Facades\Auth::user()->image)
-                            <img src="{{ asset('storage/specialistes/'.\Illuminate\Support\Facades\Auth::user()->image) }}" alt="Avatar" style="width:40px"/>
+                            <img src="{{ asset('storage/specialistes/'.\Illuminate\Support\Facades\Auth::user()->image) }}" alt="Avatar" style="width:70px;height: 50px"/>
                         @else
                         <img src="{{ asset('dist/img/spec.png') }}">
                             @endif
@@ -74,7 +74,7 @@
 
                     <div class="info">
                         <a href="#" class="d-block">{{\Illuminate\Support\Facades\Auth::user()->name}}</a>
-                        <a href="#"><i class="fa fa-circle text-success"></i>عبر النت </a>
+                        <a href="#"><i class="fa fa-circle text-success"></i>متصل</a>
                     </div>
                 </div>
 
@@ -106,17 +106,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item has-treeview">
-                            <a href="{{route('chart.index')}}" class="nav-link">
-                                <i class="nav-icon fa fa-pie-chart"></i>
-                                <p>
-                                    احصائيات
-                                    <i class="right"></i>
-                                </p>
-                            </a>
 
-
-                        <li class="nav-item">
 
 
                             <a href="{{ route('logout') }}" id="lien" class="nav-link @if($segment=='logout') active @endif" onclick="event.preventDefault();
@@ -129,7 +119,7 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                        </li>
+
 
 
                     </ul>

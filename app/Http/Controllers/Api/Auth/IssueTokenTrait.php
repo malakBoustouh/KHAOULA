@@ -17,7 +17,7 @@ trait IssueTokenTrait{
     	];
 
         if($grantType !== 'social'){
-            $params['email'] = $request->email ?: $request->email;
+            $params['name'] = $request->name ?: $request->email;
         }
 
     	$request->request->add($params);

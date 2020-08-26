@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pratique extends Model
 {
-    protected $fillable=['enfant_id','exercice_id','datePratique','score'];
+    protected $fillable=['enfant_id','exercice_id','datePratique','niveau','score'];
     public function enfant(){
         return  $this->belongsTo('App\Enfant');
     }

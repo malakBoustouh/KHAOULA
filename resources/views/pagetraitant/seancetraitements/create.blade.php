@@ -120,10 +120,16 @@
 
                                         <div class="input-group">
                                             <select class="form-control" name="note">
-                                                <option note="لايوجد تحسن">لايوجد تحسن</option>
-                                                <option note="متوسط">متوسط</option>
-                                                <option note="جيد">جيد</option>
-                                                <option note="ممتاو">ممتاو</option>
+                                                <option note="1">1</option>
+                                                <option note="2">2</option>
+                                                <option note="3">3</option>
+                                                <option note="4">4</option>
+                                                <option note="5">5</option>
+                                                <option note="6">6</option>
+                                                <option note="7">7</option>
+                                                <option note="8">8</option>
+                                                <option note="9">9</option>
+                                                <option note="1O">10</option>
                                             </select>
 
                                         </div>

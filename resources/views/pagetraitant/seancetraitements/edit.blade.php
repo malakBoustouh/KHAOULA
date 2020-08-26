@@ -237,10 +237,121 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+
+                                        <label> التقييم :</label>
+
+                                        <div class="input-group">
+                                            <select class="form-control" name="note" value="{{$seancetraitement->note}}">
+                                                <option  selected>{{$seancetraitement->note}}</option>
+                                                @if($seancetraitement->note =='1')
+                                                    <option note="2">2</option>
+                                                    <option note="3">3</option>
+                                                    <option note="4">4</option>
+                                                    <option note="5">5</option>
+                                                    <option note="6">6</option>
+                                                    <option note="7">7</option>
+                                                    <option note="8">8</option>
+                                                    <option note="9">9</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="2")
+                                                    <option note="1">1</option>
+                                                    <option note="3">3</option>
+                                                    <option note="4">4</option>
+                                                    <option note="5">5</option>
+                                                    <option note="6">6</option>
+                                                    <option note="7">7</option>
+                                                    <option note="8">8</option>
+                                                    <option note="9">9</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="3")
+                                                    <option note="1">1</option>
+                                                    <option note="2">2</option>
+                                                    <option note="4">4</option>
+                                                    <option note="5">5</option>
+                                                    <option note="6">6</option>
+                                                    <option note="7">7</option>
+                                                    <option note="8">8</option>
+                                                    <option note="9">9</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="4")
+                                                    <option note="1">1</option>
+                                                    <option note="2">2</option>
+                                                    <option note="3">3</option>
+                                                    <option note="5">5</option>
+                                                    <option note="6">6</option>
+                                                    <option note="7">7</option>
+                                                    <option note="8">8</option>
+                                                    <option note="9">9</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="5")
+                                                    <option note="1">1</option>
+                                                    <option note="2">2</option>
+                                                    <option note="3">3</option>
+                                                    <option note="4">4</option>
+                                                    <option note="6">6</option>
+                                                    <option note="7">7</option>
+                                                    <option note="8">8</option>
+                                                    <option note="9">9</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="6")
+                                                    <option note="1">1</option>
+                                                    <option note="2">2</option>
+                                                    <option note="3">3</option>
+                                                    <option note="4">4</option>
+                                                    <option note="5">5</option>
+                                                    <option note="7">7</option>
+                                                    <option note="8">8</option>
+                                                    <option note="9">9</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="7")
+                                                    <option note="1">1</option>
+                                                    <option note="2">2</option>
+                                                    <option note="3">3</option>
+                                                    <option note="4">4</option>
+                                                    <option note="5">5</option>
+                                                    <option note="6">6</option>
+                                                    <option note="8">8</option>
+                                                    <option note="9">9</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="8")
+                                                    <option note="1">1</option>
+                                                    <option note="2">2</option>
+                                                    <option note="3">3</option>
+                                                    <option note="4">4</option>
+                                                    <option note="5">5</option>
+                                                    <option note="6">6</option>
+                                                    <option note="7">7</option>
+                                                    <option note="9">9</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="9")
+                                                    <option note="1">1</option>
+                                                    <option note="2">2</option>
+                                                    <option note="3">3</option>
+                                                    <option note="4">4</option>
+                                                    <option note="5">5</option>
+                                                    <option note="6">6</option>
+                                                    <option note="7">7</option>
+                                                    <option note="8">8</option>
+                                                    <option note="1O">10</option>
+                                                @elseif($seancetraitement->note =="10")
+                                                    <option note="1">1</option>
+                                                    <option note="2">2</option>
+                                                    <option note="3">3</option>
+                                                    <option note="4">4</option>
+                                                    <option note="5">5</option>
+                                                    <option note="6">6</option>
+                                                    <option note="7">7</option>
+                                                    <option note="8">8</option>
+                                                    <option note="9">9</option>
+                                                @endif
+                                            </select>
+                                        </div></div>
+
+                                    <div class="form-group">
                                         <label>
                                             الوصف :
                                         </label>
-                                        <textarea class="remarquearea" rows="13" cols="58" style="width: 380px" name="description"  >{{$seancetraitement->description}}</textarea>
+                                        <textarea class="remarquearea" rows="13" cols="20" style="width: 380px" name="description"  >{{$seancetraitement->description}}</textarea>
                                     </div>
 
                                 </div>
@@ -272,7 +383,7 @@
 
                             <!-- /.row -->
 
-                                </div></div></form></div></section>
+                                    </div></div></form></div></section>
 
                 <!-- ./wrapper -->
       </div>

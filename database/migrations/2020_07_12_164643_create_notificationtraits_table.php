@@ -17,6 +17,8 @@ class CreateNotificationtraitsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('traitant_id');
             $table->foreign('traitant_id')->references('id_traitant')->on('traitants')->onDelete('cascade');;
+         $table->unsignedBigInteger('parentt_id');
+            $table->foreign('parentt_id')->references('id_parentt')->on('parentts')->onDelete('cascade');;
             $table->Date('dateNotificationtrait')->nullable();
             $table->string('etat')->nullable();
             $table->string('detail')->nullable();

@@ -15,56 +15,21 @@ namespace App\Http\Controllers\Api;
 class AuthController extends Controller
 {
     public function login(Request $request){
-
-       /* $creds = $request->only(['email','password']);
+        $creds = $request->only(['email','password']);
 
         if(!$token=auth()->attempt($creds)){
 
             return response()->json([
-
-
                 'success' => false,
-                'result' => $token
+                'message' => 'invalid credintials'
             ]);
         }
         return response()->json([
             'success' =>true,
             'token' => $token,
             'user' => Auth::user()
-        ]);*/
-        $credentials = $request->only(['email', 'password']);
+        ]);
 
-        try {
-            $token = Auth::guard()->attempt($credentials);
-
-            if(!$token) {
-                throw new AccessDeniedHttpException();
-            }
-
-        } catch (JWTException $e) {
-            throw new HttpException(500);
-        }
-
-        return response()
-            ->json([
-                'status' => 'ok',
-                'token' => $token,
-                'expires_in' => Auth::guard()->factory()->getTTL() * 60
-            ]);
-
-      /*$input=$request->all();
-        if(!$token=JWTAuth::attempt($input)){
-
-            return response()->json([
-
-                'result' => 'created with succes'
-            ]);
-        }
-        return response()->json([
-
-            'result' => $token
-
-        ]);*/
     }
 
 
@@ -108,8 +73,7 @@ class AuthController extends Controller
     public function saveUserInfo(Request $request){
         $user = User::find(Auth::user()->id);
         $user->name = $request->name;
-        $user->lastname = $request->lastname;
-        $photo = '';
+        $image = '';
         //check if user provided photo
         if($request->photo!=''){
             // user time for photo name to prevent name duplication
@@ -123,7 +87,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'photo' => $photo
+            'image' => $photo
         ]);
 
     }

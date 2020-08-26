@@ -64,80 +64,52 @@ class DiagnosticController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function store(Request $request, Diagnostic $diagnostic, Detail $detail)
     {
-
-        dd($request->all());
         if (isset($request)) {
-            /*  $this->validate($request,
-                  array(
-                      'nom'=>'required',
-                      'prenom'=>'required',
-                      'dateNaissance'=>'required',
-                      'autismresult'=>'required'
-                  )
-              );*/
-
             $nomid = $request->enf_id;
             $prenomid = $request->enfant_id;
             $dateid = $request->enfa_id;
-
-
-            //  dd("test1");
-            $diagnostic->enfant_id = $prenomid;
-
-            $diagnostic->id_superviseur = $request->trait;
             $nomSpecialiste = Auth::user()->name;
             $nomSpecialiste = User::where('name', 'LIKE', '%' . $nomSpecialiste . '%')->first();
             $iduser = $nomSpecialiste->id;
-            $specialiste = Carsspecialiste::join('users', 'users.id', '=', 'carsspecialistes.user_id')->where('carsspecialistes.user_id', $iduser)->first();
-            $idSp = $specialiste->id_carsspecialiste;
-            $diagnostic->carsspecialiste_id = $idSp;
-            $diagnostic->dateDiagnostic = $request->date;
-            $diagnostic->remarque = $request->remarque15;
-            $diagnostic->niveau = $request->autismresult;
-            $diagnostic->save();
-            $requestData = $request->all();
 
+            $specialiste = Carsspecialiste::join('users', 'users.id', 'carsspecialistes.user_id')->where('carsspecialistes.user_id', $iduser)->first();
+            $idSp = $specialiste->id_carsspecialiste;
+            $diagnostic = Diagnostic::create([
+                "enfant_id" => $prenomid,
+                "id_superviseur" => $request->trait,
+                "carsspecialiste_id" => $idSp,
+                "dateDiagnostic" => $request->date,
+                "remarque" => $request->remarque15,
+                "niveau" => $request->autismresult
+            ]);
+
+            $responses = json_decode($request->responses);
+            $questions = json_decode($request->questions);
+            $remarques = json_decode($request->remarques);
+            /* dd($questions); */
             for ($i = 1; $i <= 15; $i++) {
+                $response = (array)$responses[$i - 1];
+                $question = (array)$questions[$i - 1];
+                $remarque = (array)$remarques[$i - 1];
+                /* dd($response); */
                 $details = new Detail();
-                $details->reponses = $requestData['r' . $i];
+                $details->reponses = $response['rText'];
+                $details->numResponses =  $response['value'];
                 // $requestData['text'];
-                //$requestData['r'.$i];
-                $details->questions = $requestData['quest' . $i];
-                $details->observations = $requestData['remarque' . $i];
+
+                $details->questions = $question['value'];
+                $details->observations = $remarque['value'];
                 $diagnostic->detail()->save($details);
             }
 
             return redirect()->route('pagecarsspecialiste.affiche', $prenomid)->with(compact('detail'))->with('success', 'تمت اضافة التشخيص بنجاح ');
-
-
-        } else {
-            return view('pagecarsspecialiste.diagnostics.create');
-
         }
     }
 
-    public function question($j)
-    {
-        $quest1 = "العلاقات مع الآخرين";
-        $quest2 = " التقليد";
-        $quest3 = "الإستجابة الإنفعالية";
-        $quest4 = "إستخدام الجس";
-        $quest5 = "إستخدام الأشياء";
-        $quest6 = " التكيف للتغير";
-        $quest7 = "لإستجابة البصرية";
-        $quest8 = "الإستجابة السمعية";
-        $quest9 = " إستجابات اللمس،الشم،التذوق و استخدامها";
-        $quest10 = " الخوف و العصبية";
-        $quest11 = "التواصل اللفظي";
-        $quest12 = "التواصل غير اللفظي";
-        $quest13 = "مستوى النشاط";
-        $quest14 = "المستوى و الدرجة الخاصة بالإستجابة العقلية";
-        $quest15 = "الإنطباع العام";
-    }
 
     /**
      * Display the specified resource.
@@ -155,16 +127,38 @@ class DiagnosticController extends Controller
         $id_carsspecialiste = $carsspecialiste->id_carsspecialiste;
         $carsspecialiste = carsspecialiste::find($id_carsspecialiste);
         $arr['carsspecialistes'] = Carsspecialiste::all();
+        $detail = Detail::join('diagnostics', 'diagnostics.id', '=', 'detail.diagnostic_id')->where('diagnostics.id', $id)->get();
+       //responses and reponse
+            $detail0 = $detail->get(0);$question= $detail0->questions;$reponse0= $detail0->reponses;$observ0= $detail0->observations;
+            $detail1 = $detail->get(1);$question1= $detail1->questions;$reponse1= $detail1->reponses;$observ1= $detail1->observations;
+            $detail2 = $detail->get(2);$question2= $detail2->questions;$reponse2= $detail2->reponses;$observ2= $detail2->observations;
+            $detail3 = $detail->get(3);$question3= $detail3->questions;$reponse3= $detail3->reponses;$observ3= $detail3->observations;
+            $detail4 = $detail->get(4);$question4= $detail4->questions;$reponse4= $detail4->reponses;$observ4= $detail4->observations;
+            $detail5 = $detail->get(5);$question5= $detail5->questions;$reponse5= $detail5->reponses;$observ5= $detail5->observations;
+            $detail6 = $detail->get(6);$question6= $detail6->questions;$reponse6= $detail6->reponses;$observ6= $detail6->observations;
+            $detail7 = $detail->get(7);$question7= $detail7->questions;$reponse7= $detail7->reponses;$observ7= $detail7->observations;
+            $detail8 = $detail->get(8);$question8= $detail8->questions;$reponse8= $detail8->reponses;$observ8= $detail8->observations;
+            $detail9 = $detail->get(9);$question9 =$detail9->questions;$reponse9= $detail9->reponses;$observ9= $detail9->observations;
+            $detail10 = $detail->get(10);$question10= $detail10->questions;$reponse10= $detail10->reponses;$observ10= $detail10->observations;
+            $detail11 = $detail->get(11);$question11= $detail11->questions;$reponse11= $detail11->reponses;$observ11= $detail11->observations;
+            $detail12 = $detail->get(12);$question12= $detail12->questions;$reponse12= $detail12->reponses;$observ12= $detail12->observations;
+            $detail13 = $detail->get(13);$question13= $detail13->questions;$reponse13= $detail13->reponses;$observ13= $detail13->observations;
+            $detail14 = $detail->get(14);$question14= $detail14->questions;$reponse14= $detail14->reponses;$observ14= $detail14->observations;
+        $arr['detail'] = Detail::all();
         $parentt = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id', $id_enfant)->first();
         $firs = $parentt->id_parentt;
         $parent = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.id_parentt', $firs + 1)->first();
         $calculeAge = Carbon::parse($enfant->dateNaissance);
         $age = $calculeAge->age;
-        return view('pagecarsspecialiste.diagnostics.show')->with(compact('diagnostic', 'parent', 'age', 'parentt', 'carsspecialiste', 'enfant','id'))->with($arr);
+        return view('pagecarsspecialiste.diagnostics.show')->with(compact('diagnostic','parent', 'age', 'parentt', 'carsspecialiste', 'enfant','id',
+        'question','question1','question2','question3','question4','question5','question6','question7','question8','question9','question10','question11','question12','question13','question14',
+        'reponse0','reponse1','reponse2','reponse3','reponse4','reponse5','reponse6','reponse7','reponse8','reponse9','reponse10','reponse11','reponse12','reponse13','reponse14',
+        'observ0','observ1','observ2','observ3','observ4','observ5','observ6','observ7','observ8','observ9','observ10','observ11','observ12','observ13','observ14'))->with($arr);
     }
 
     public function affiche($id_enfant)
     {
+
         $arr['enfants'] = Enfant::all();
         $arr['diagnostics'] = Diagnostic::all();
         $arr['carsspecialistes'] = Carsspecialiste::all();
@@ -212,20 +206,32 @@ class DiagnosticController extends Controller
         $iduser = $nomSpecialiste->id;
         $specialiste = Carsspecialiste::join('users', 'users.id', '=', 'carsspecialistes.user_id')->where('carsspecialistes.user_id', $iduser)->first();
         $idSp = $specialiste->id_carsspecialiste;
-        $diagnostic->carsspecialiste_id = $idSp;
-        $diagnostic->dateDiagnostic = $request->date;
-        $diagnostic->remarque = $request->remarque;
-        $diagnostic->niveau = $request->autismresult;
-        $diagnostic->save();
-        $requestData = $request->all();
+        $diagnostic = Diagnostic::create([
+            "enfant_id" => $prenomid,
+            "id_superviseur" => $request->trait,
+            "carsspecialiste_id" => $idSp,
+            "dateDiagnostic" => $request->date,
+            "remarque" => $request->remarque15,
+            "niveau" => $request->autismresult
+        ]);
+
+        $responses = json_decode($request->responses);
+        $questions = json_decode($request->questions);
+        $remarques = json_decode($request->remarques);
+        /* dd($questions); */
         for ($i = 1; $i <= 15; $i++) {
+            $response = (array)$responses[$i - 1];
+            $question = (array)$questions[$i - 1];
+            $remarque = (array)$remarques[$i - 1];
+            /* dd($response); */
             $details = new Detail();
-            $details->reponses = $requestData['r' . $i];
-            $details->questions = $requestData['quest' . $i];
-            $details->observations = $requestData['remarque' . $i];
+            $details->reponses = $response['rText'];
+            // $requestData['text'];
+            //$requestData['r'.$i];
+            $details->questions = $question['value'];
+            $details->observations = $remarque['value'];
             $diagnostic->detail()->save($details);
         }
-
         return redirect()->route('pagecarsspecialiste.affiche', $prenomid)->with('success', 'تمت اضافة التشخيص بنجاح ');
 
 
@@ -239,8 +245,8 @@ class DiagnosticController extends Controller
      */
     public function edit(Diagnostic $diagnostic)
     {
-        $arr['diagnostic'] = $diagnostic;
 
+        $arr['diagnostic'] = $diagnostic;
         $arr['enfant'] = $diagnostic->enfant_id;
         $enfant = enfant::find($arr['enfant']);
         $arr['enfant'] = $enfant;
@@ -249,8 +255,16 @@ class DiagnosticController extends Controller
         $carsspecialiste = carsspecialiste::find($arr['carsspecialiste']);
         $arr['carsspecialiste'] = $carsspecialiste;
 
-
-        return view('pagecarsspecialiste.diagnostics.edit', compact('enfant'), compact('carsspecialiste'))->with($arr);
+        $arr['detail'] =$diagnostic->id;
+        $detail = Detail::join('diagnostics', 'diagnostics.id', '=', 'detail.diagnostic_id')->where('diagnostics.id',  $arr['detail'] )->get();
+        $detail0=$detail->get(0);  $detail1=$detail->get(1);  $detail2=$detail->get(2);  $detail3=$detail->get(3);
+        $detail4=$detail->get(4);  $detail5=$detail->get(5);  $detail6=$detail->get(6);  $detail7=$detail->get(7);
+        $detail8=$detail->get(8);  $detail9=$detail->get(9);  $detail10=$detail->get(10);  $detail11=$detail->get(11);
+        $detail12=$detail->get(12);  $detail13=$detail->get(13);  $detail14=$detail->get(14);
+        $sumResponses=($detail0->numResponses+$detail1->numResponses+$detail2->numResponses+$detail3->numResponses+$detail4->numResponses+$detail5->numResponses+$detail6->numResponses+
+       $detail7->numResponses+$detail8->numResponses+$detail9->numResponses+$detail10->numResponses+$detail11->numResponses+$detail12->numResponses+$detail13->numResponses+$detail14->numResponses);
+        return view('pagecarsspecialiste.diagnostics.edit')->with(compact('carsspecialiste','enfant',
+        'detail0','detail1','detail2','detail3','detail4','detail5','detail6','detail7','detail8','detail9','detail10','detail11','detail12','detail13','detail14','sumResponses'))->with($arr);
     }
 
     /**
@@ -260,20 +274,56 @@ class DiagnosticController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Diagnostic $diagnostic)
+    //public function update(Request $request, Diagnostic  $idDiagnostic)
+    public function update(Request $request,$idDiagnostic)
     {
-        // dd($request->all());
-        // $nomid=$request->enf_id;
-        // $prenomid=$request->enfant_id;
-        // $dateid=$request->enfa_id;
-        // if(($nomid==$prenomid) && ($dateid==$prenomid)){
-        $diagnostic->enfant_id = $request->enf_id;
-        $diagnostic->carsspecialiste_id = $request->speciale_id;
-        $diagnostic->dateDiagnostic = $request->date;
-        $diagnostic->remarque = $request->remarque;
-        $diagnostic->niveau = $request->autismresult;
 
+        $diagnostic= Diagnostic::findOrFail($idDiagnostic);
+        $diagnostic->niveau = $request->autismresult;
         $diagnostic->save();
+        $detail = Detail::join('diagnostics', 'diagnostics.id', '=', 'detail.diagnostic_id')->where('detail.diagnostic_id', $idDiagnostic)->get();
+       $details=$detail->get(0);
+      /*  $responses = json_decode($request->responses);
+        $questions = json_decode($request->questions);
+        $remarques = json_decode($request->remarques);
+        /* dd($questions); */
+       /* for ($i = 1; $i <= 15; $i++) {
+            $response = (array)$responses[$i - 1];
+            $question = (array)$questions[$i - 1];
+            $remarque = (array)$remarques[$i - 1];
+
+            $details = $details->get($i - 1);
+            $details->reponses = $response['rText'];
+            $details->numResponses =  $response['value'];
+            // $requestData['text'];
+
+            $details->questions = $question['value'];
+            $details->observations = $remarque['value'];
+            $diagnostic->detail()->save($details);
+        }*/
+
+
+        $responses = json_decode($request->responses);
+        $questions = json_decode($request->questions);
+        $remarques = json_decode($request->remarques);
+
+            $response = (array)$responses[0];
+            $question = (array)$questions[0];
+            $remarque = (array)$remarques[0];
+
+            $details->reponses = $response['rText'];
+            $details->numResponses =  $response['value'];
+            // $requestData['text'];
+
+            $details->questions = $question['value'];
+            $details->observations = $remarque['value'];
+           // $diagnostic->detail()->save($details->get($i-1));
+
+
+          $diagnostic->detail()->save($details);
+           // $details->save();
+
+
         return redirect()->route('pagecarsspecialiste.diagnostic.index')->with('success', 'تمت عملية التعديل بنجاح ');
     }
 
@@ -368,79 +418,5 @@ class DiagnosticController extends Controller
         }
     }
 
-    function get_customer_data()
-    {
-        /*$enfants = DB::table('enfants')
-            ->get();
-        return $enfants;*/
-        $id = 2;
-        $enfant = Enfant::join('diagnostics', 'diagnostics.enfant_id', '=', 'enfants.id_enfant')->where('diagnostics.id', $id)->first();
-        $id_enfant = $enfant->id_enfant;
-        $enfant = $enfant::find($id_enfant);
-        return $enfant;
-    }
 
-    function pdf()
-    {
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($this->convert_enfant_to_html());
-        return $pdf->stream();
-    }
-    /* function convert_enfant_to_html()
-     {
-         $enfants = $this->get_customer_data();
-         $output = '
-      <h3 align="center">Customer Data</h3>
-      <table width="100%" style="border-collapse: collapse; border: 0px;">
-       <tr>
-     <th  width = "30px">num</th>
-     <th  width = "30px">اللقب</th>
-                         <th  width = "30px">الاسم</th>
-                         <th  width = "30px">الجنس</th>
-
-    </tr>
-      ';
-         foreach($enfants as $enfant)
-         {
-             $output .= '
-       <tr>
-         <td style="border: 1px solid; padding:12px;">'.$enfant->id_enfant.'</td>
-        <td style="border: 1px solid; padding:12px;" value="$enfant->id_enfant">'.$enfant->nom.'</td>
-        <td style="border: 1px solid; padding:12px;" value="$enfant->id_enfant">'.$enfant->prenom.'</td>
-        <td style="border: 1px solid; padding:12px;" >'.$enfant->sexe.'</td>
-
-       </tr>
-       ';
-         }
-         $output .= '</table>';
-         return $output;
-     }
- }*/
-    function convert_enfant_to_html()
-    {
-        $enfant = $this->get_customer_data();
-        $output = '
-     <h3 align="center">Customer Data</h3>
-
-        <ul class="list-group list-group-unbordered mb-3">
-
-                                                    <li class="list-group-item">
-                                                        <b>"/الجنس/":</b> <a>' .$enfant->sexe.'</a>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <b>العمر:</b> <a></a>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <b>زمرة الدم:</b> <a>' .$enfant->groupage.'</a>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <b> العنوان:</b> <a>'.$enfant->domicile.' </a>
-                                                    </li>
-                                                </ul>
-
-
-     ';
-
-        return $output;
-    }
 }

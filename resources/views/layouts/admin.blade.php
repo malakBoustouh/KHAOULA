@@ -52,11 +52,11 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{ asset('dist/img/admin.png')}}" alt="Avatar" style="width:30px">
+                        <img src="{{ asset('dist/img/admin.png')}}" alt="Avatar" style="width:70px;height: 50px">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">{{\Illuminate\Support\Facades\Auth::user()->name}}</a>
-                        <a href="#"><i class="fa fa-circle text-success"></i>عبر النت </a>
+                        <a href="#"><i class="fa fa-circle text-success"></i>متصل </a>
 
                     </div>
                 </div>

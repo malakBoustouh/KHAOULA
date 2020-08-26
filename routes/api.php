@@ -11,13 +11,23 @@ use Illuminate\Http\Request;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
+
 */
 //Route::post('login', 'Api\Auth\LoginController@login');
 //Route::post('refresh', 'Api\Auth\LoginController@refresh');
 //user
-Route::post('login','Api\AuthController@login');
+/*Route::post('login','Api\AuthController@login');
 Route::post('register','Api\AuthController@register');
-Route::get('logout','Api\AuthController@logout');
+Route::get('logout','Api\AuthController@logout');*/
+
+Route::post('register', 'Api\Auth\RegisteController@register');
+
+Route::post('login', 'Api\Auth\RegisteController@login');
+
+//Route::post('register', 'Api\Auth\RegisterController@register');
+/*Route::post('login', 'Api\Auth\LoginController@login');
+Route::post('refresh', 'Api\Auth\LoginController@refresh');*/
+Route::post('social_auth', 'Api\Auth\SocialAuthController@socialAuth');
 Route::post('save_user_info','Api\AuthController@saveUserInfo')->middleware('jwtAuth');
 //post
 Route::post('posts/create','Api\PostsController@create')->middleware('jwtAuth');

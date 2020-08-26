@@ -5,8 +5,6 @@
 
         <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js')}}"></script>
         <script type="text/javascript" src="{{ asset('https://www.gstatic.com/charts/loader.js')}}"></script>
-        <link rel="stylesheet" href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')}}" />
-        <link rel="stylesheet" href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')}}">
 
 
         <meta charset="utf-8">
@@ -30,10 +28,51 @@
             {
                 var data = google.visualization.arrayToDataTable(analytics);
                 var options = {
-                    title : 'النسبة المئوية للاناث و الذكور'
+                    title : 'النسبة المئوية للاناث و الذكور', is3D: true,
                 };
                 var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
                 chart.draw(data, options);
+            }
+        </script>
+        <script type="text/javascript">
+            var analyticsmale = <?php echo $male; ?>
+
+            google.charts.load('current', {'packages':['corechart']});
+
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart()
+            {
+                var datamale = google.visualization.arrayToDataTable(analyticsmale);
+                var options = {
+                    title : 'النسبة المئوية للذكور في كل مستوى ',
+
+                        is3D: true,
+
+                };
+                var chart = new google.visualization.PieChart(document.getElementById('pie_chartmale'));
+                chart.draw(datamale, options);
+            }
+        </script>
+
+        <script type="text/javascript">
+            var analyticsFemale = <?php echo $female; ?>
+
+            google.charts.load('current', {'packages':['corechart']});
+
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart()
+            {
+                var dataFemale = google.visualization.arrayToDataTable(analyticsFemale);
+                var options = {
+                    title : 'النسبة المئوية للاناث في كل مستوى ',
+
+                        is3D: true,
+
+                };
+                var chart = new google.visualization.PieChart(document.getElementById('pie_chartfemale'));
+                chart.draw(dataFemale, options);
             }
         </script>
         <script type="text/javascript">
@@ -47,7 +86,8 @@
             {
                 var da = google.visualization.arrayToDataTable(anal);
                 var options = {
-                    title : 'النسبة المئوية لمستويات التوحد'
+                    title : 'النسبة المئوية لمستويات التوحد',
+                    is3D: true,
                 };
                 var chart = new google.visualization.PieChart(document.getElementById('pie'));
                 chart.draw(da, options);
@@ -66,10 +106,69 @@
                 var dat = google.visualization.arrayToDataTable(analyts);
 
                 var options = {
-                    title : 'احصائيات السنوية لمرضى التوحد'
+                    title : 'احصائيات السنوية لمرضى التوحد',
+                    hAxis: {
+
+                        format: '0'
+                    },
+                    vAxis: {
+                       format: '0',
+                        viewWindow: {
+                            min: 0,
+                          }
+                    },
                 };
                 var chart = new google.visualization.LineChart(document.getElementById('chart'));
                 chart.draw(dat, options);
+            }
+        </script>
+        <script type="text/javascript">
+            var analytsMonth = <?php echo $dateMonth; ?>
+
+            google.charts.load('current', {'packages':["corechart"]});
+
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart()
+            {
+
+                var datMonth = google.visualization.arrayToDataTable(analytsMonth);
+
+                var options = {
+                    title : 'احصائيات حصص المعالجة اليومية للمرضى التوحد',
+                    hAxis: {
+                        title: 'الاشهر',
+                        format: '0'
+                    },
+                    vAxis: {
+                        title: 'عدد المصابين', format: '0',
+                        viewWindow: {
+                            min: 0,
+                          }
+                    },
+                };
+                var chart = new google.visualization.LineChart(document.getElementById('chartMonth'));
+                chart.draw(datMonth, options);
+            }
+        </script>
+        <script type="text/javascript">
+            var analytsMethode = <?php echo $methode; ?>
+
+            google.charts.load('current', {'packages':["corechart"]});
+
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart()
+            {
+
+                var datMethode = google.visualization.arrayToDataTable(analytsMethode);
+
+                var options = {
+                    title : 'احصائيات الطرق المعتمدة اثناء حصص المعالجة',is3D: true,
+
+                };
+                var chart = new google.visualization.PieChart(document.getElementById('chartMethode'));
+                chart.draw(datMethode, options);
             }
         </script>
         <script type="text/javascript">
@@ -84,7 +183,23 @@
                 var datAge = google.visualization.arrayToDataTable(analytsAge);
 
                 var options = {
-                    title : 'احصائيات اعمار مرضى التوحد'
+                    title : 'احصائيات اعمار مرضى التوحد',
+                    hAxis: {
+                        title: 'عدد المصابين',
+                        format: '0',
+                        viewWindow: {
+                            min: 0,
+
+                        }
+                    },
+                    vAxis: {
+                        title: 'الفئة العمرية', format: '0'
+                    },
+                    animation:{
+                        "startup": true,
+                        duration: 1000,
+                        easing: 'out',
+                    }
                 };
                 var chartAge = new google.visualization.BarChart(document.getElementById('chartAge'));
                 chartAge.draw(datAge, options);
@@ -97,22 +212,30 @@
     <br />
     <div class="container">
         <h3 align="center">احصائيات</h3><br />
-
-        <div class="panel panel-default">
+        <div class="card">
 
                 <div class="row">
-                    <div class="card-body">
 
-                    <div class="col-md-6">
-                        <div id="pie_chart" style="width:550px; height:550px;margin-right: 50px;margin-top: 100px;"></div>
-                    </div>
-                    <div class="col-md-6">
-                        <div id="pie" style="width:550px; height:550px;margin-right:-09px;margin-top: 100px;"></div>
-                    </div></div>
-                </div></div>
 
+                    <div class="col-md-6"><div id="pie_chart" style="width:500px; height:500px;"></div></div>
+                    <div class="col-md-6"><div id="pie" style="width:500px; height:500px;"></div></div>
+                </div>
+
+
+        <div class="row">
+            <div class="col-md-6"><div id="pie_chartmale" style="width:500px; height:500px;"></div></div>
+                <div class="col-md-6"><div id="pie_chartfemale" style="width:500px; height:500px;" ></div></div>
+        </div>
             <div class="panel-body" align="center">
+
+            <div class="col-md-6">
+                <div id="chartMethode" style="width:500px; height:500px;"></div>
+            </div>
+            </div>
+
+        <div class="panel-body" align="center">
                 <div id="chart" style="width: 100%; height: 600px;"></div>
+            <div id="chartMonth" style="width: 100%; height: 600px;"></div>
             </div>
 
             <div class="panel panel-default">
@@ -126,12 +249,7 @@
                         <div id="chartAge" style="width: 100%; height: 600px;"></div>
                     </div>
                 </div>
-            </div>
-
-
-
-        </div>
-
+</div></div></div>
     {!! Charts::scripts() !!}
     {!! $chart->script() !!}
 
