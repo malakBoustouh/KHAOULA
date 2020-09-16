@@ -173,7 +173,7 @@
                                                                         @foreach($carsspecialistes as $t   )
                                                                             @if($h->carsspecialiste_id==$t->id_carsspecialiste)
                                                                                 <td value="{{$t->id_carsspecialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
-                                                                                <td  value="{{$t->id_carsspecialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
+                                                                                <td  value="{{$t->id_supervisseur}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
                                                                             @endif
                                                                         @endforeach
                                                                         <td>{{$h->niveau}}</td>
@@ -1434,8 +1434,8 @@
 
                                                         <button type="submit" class="result" value="Submit">المجموع</button>
                                                         <input type="text" name="points" id="points" disabled />
-                                                        <button type="submit" id="degree" class="saveresult" value="Submit"> حفظ</button>
-                                                    </div>
+                                                        <button type="submit" id="degree" value="Submit">عرض النتيجة</button>
+                                                        <button type="submit" id="saveresult" class="saveresult" value="Submit"> حفظ</button>                                                    </div>
                                                 </div>
                                                     <!-- /.content -->
 
@@ -1638,9 +1638,11 @@
                 }
             }
 
+
+        });
+        $('#saveresult').click(function() {
             submitForm();
         });
-
         function submitForm() {
             var responses =[];
             var questions =[];
@@ -1781,10 +1783,6 @@
     <!-- jQuery -->
 
 
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.js"></script>
+
                                     </div></div></div></div></div></div></div></section></div>
 @endsection

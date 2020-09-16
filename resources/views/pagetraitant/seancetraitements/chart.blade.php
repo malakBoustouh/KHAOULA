@@ -23,10 +23,9 @@
             {
                 var data = google.visualization.arrayToDataTable(analytics);
                 var options = {
-                    title : 'منحنى تطور حالة الطفل في الحصص خلال العام',
+                    title : 'منحنى تطور مستوى الطفل في الالعاب التعليمية خلال العام',
                     hAxis: {
-                        title: 'اشهر',format: '0',
-
+                        title: 'الاشهر'
                     },
                     vAxis: {
                         title: 'التقييم',format: '0',
@@ -36,8 +35,6 @@
                     },
                     //backgroundColor: '#f1f8e9'
                 };
-
-
                 var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
                 chart.draw(data, options);
             }
@@ -383,6 +380,6 @@
             </div>
         </div>
         </div>
-    </div>
+
     </body>
 @endsection

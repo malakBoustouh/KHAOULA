@@ -35,8 +35,6 @@
                     },
                     //backgroundColor: '#f1f8e9'
                 };
-
-
                 var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
                 chart.draw(data, options);
             }

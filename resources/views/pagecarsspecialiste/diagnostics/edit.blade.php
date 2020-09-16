@@ -1277,8 +1277,8 @@
 
                              <button type="submit" class="result" value="Submit"  >المجموع</button>
                              <input type="text" name="points" value="{{$sumResponses}}" id="points" disabled />
-                             <button type="submit" id="degree" class="saveresult" value="Submit"> حفظ</button>
-
+                             <button type="submit" id="degree" value="Submit">عرض النتيجة</button>
+                             <button type="submit" class="saveresult" value="Submit"> حفظ</button>
                              {!! Html::linkRoute('pagecarsspecialiste.diagnostics.show', 'الغاء', array($diagnostic->id), array('class' => 'btn btn-danger btn-block','style'=>"width: 158px;padding: 15px 32px;font-size: 19px;text-align: center; margin-right: 185px;margin-top:2px ;  height:  48px;")) !!}
 
 
@@ -1423,9 +1423,11 @@
              }
          }
 
+
+     });
+     $('#saveresult').click(function() {
          submitForm();
      });
-
      function submitForm() {
          var responses =[];
          var questions =[];
@@ -1561,10 +1563,6 @@
 
 
  <!-- select-->
- <!-- jQuery UI 1.11.4 -->
- <script src="{{asset('https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')}}"></script>
- <!-- AdminLTE App -->
- <script src="{{asset('dist/js/adminlte.js')}}"></script>
 
 
 

@@ -46,7 +46,7 @@ return [
          // 'driver' => 'jwt',
           'driver' => 'passport',
             'provider' => 'users',
-        'hash' => false,
+        //'hash' => false,
         ],
     ],
 

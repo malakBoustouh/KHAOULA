@@ -13,12 +13,63 @@ use Illuminate\Http\Request;
 |
 
 */
+Route::prefix('v1')->group(function(){
+    Route::post('login', 'Api\AuthentifController@login');
+
+    Route::group(['middleware' => 'auth:api'], function(){
+        Route::post('getUser', 'Api\AuthController@getUser');
+    });
+});
+
+Route::group([ 'prefix' => 'auth'], function (){
+    Route::group(['middleware' => ['guest:api']], function () {
+        Route::post('login', 'APII\AuthController@login');
+        Route::post('signup', 'APII\AuthController@signup');
+    });});
+
+
+//login
+Route::post('login','Api\AuthController@login');
+//out
+Route::get('logout','Api\AuthController@logout');
+
+
+//NotificationTraite
+//parentt
+Route::post('users/update','Api\UsersController@update')->middleware('auth:api');
+//Route::post('users/update','Api\UsersController@update')->middleware('jwtAuth');
+Route::post('users/parents','Api\UsersController@parents')->middleware('auth:api');
+//Route::post('users/parents','Api\UsersController@parents')->middleware('jwtAuth');
+//seancetraitement
+Route::post('users/seance','Api\SeancetraitementsController@seancetraitements')->middleware('auth:api');
+//Route::post('users/seance','Api\SeancetraitementsController@seancetraitements')->middleware('jwtAuth');
+//pratiques
+Route::post('pratiques/create','Api\PratiquesController@create')->middleware('auth:api');
+//Route::post('pratiquess/create','Api\PratiquesController@create')->middleware('jwtAuth');
+//remarques
+Route::post('remarques/create','Api\RemarquesController@create')->middleware('auth:api');
+//Route::post('remarques/create','Api\RemarquesController@create')->middleware('jwtAuth');
+//notification
+Route::post('notifications/show','Api\NotificationsController@show')->middleware('auth:api');
+//Route::post('remarques/create','Api\RemarquesController@create')->middleware('jwtAuth');
+
+
+
+
+
+
+
+
+
+
+
+
 //Route::post('login', 'Api\Auth\LoginController@login');
 //Route::post('refresh', 'Api\Auth\LoginController@refresh');
-//user
-/*Route::post('login','Api\AuthController@login');
+
+
+
 Route::post('register','Api\AuthController@register');
-Route::get('logout','Api\AuthController@logout');*/
 
 Route::post('register', 'Api\Auth\RegisteController@register');
 
@@ -29,20 +80,5 @@ Route::post('login', 'Api\Auth\RegisteController@login');
 Route::post('refresh', 'Api\Auth\LoginController@refresh');*/
 Route::post('social_auth', 'Api\Auth\SocialAuthController@socialAuth');
 Route::post('save_user_info','Api\AuthController@saveUserInfo')->middleware('jwtAuth');
-//post
-Route::post('posts/create','Api\PostsController@create')->middleware('jwtAuth');
-Route::post('posts/delete','Api\PostsController@delete')->middleware('jwtAuth');
-Route::post('posts/update','Api\PostsController@update')->middleware('jwtAuth');
-Route::get('posts','Api\PostsController@posts')->middleware('jwtAuth');
-Route::get('posts/my_posts','Api\PostsController@myPosts')->middleware('jwtAuth');
-
-
-//comment
-Route::post('comments/create','Api\CommentsController@create')->middleware('jwtAuth');
-Route::post('comments/delete','Api\CommentsController@delete')->middleware('jwtAuth');
-Route::post('comments/update','Api\CommentsController@update')->middleware('jwtAuth');
-Route::post('posts/comments','Api\CommentsController@comments')->middleware('jwtAuth');
-
-
 //like
 Route::post('posts/like','Api\LikesController@like')->middleware('jwtAuth');

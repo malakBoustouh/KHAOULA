@@ -20,7 +20,7 @@ class CreateNotificationtraitsTable extends Migration
          $table->unsignedBigInteger('parentt_id');
             $table->foreign('parentt_id')->references('id_parentt')->on('parentts')->onDelete('cascade');;
             $table->Date('dateNotificationtrait')->nullable();
-            $table->string('etat')->nullable();
+            $table->integer('etat')->default(1);
             $table->string('detail')->nullable();
             $table->timestamps();
         });

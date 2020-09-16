@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enfant;
 use App\Traitant;
 use App\User;
+use DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -46,6 +47,7 @@ class TraitantsController extends Controller
      */
     public function store(Request $request,Traitant $traitant,User $user)
     {
+
         $this->validate($request, array('image'=>'required',
                 'prenom'=>'required',
                 'nom'=>'required',
@@ -53,39 +55,49 @@ class TraitantsController extends Controller
                 'motpass'=>'required', 'email'=>'required|email', 'numTel'=>'required', 'address'=>'required',
                 'specialiste'=>'required')
         );
-        if ($request->image->getClientOriginalName()) {
-            $ext = $request->image->getClientOriginalExtension();
-            $file = date('YmdHis') . rand(1, 99999) . '.' . $ext;
-            $request->image->storeAs('public/traitants', $file);
-        } else {
-            $file = '';
-        }
-        $names[0] = $request->prenom;
-        $names[1] = $request->nom;
-        $user->name= implode(" ", $names);
-        $user->email=$request->email;
-        $user->image=$file;
-        $user->password=Hash::make($request->motpass);
-        $user->usertype="traitant";
-        $user->save();
-        $requestData=$request->all();
-        for($i=1;$i<=1;$i++) {
-            $traitant = new Traitant();
-            $traitant->image = $file;
-            $traitant->prenom = $requestData['prenom'];
-            $traitant->nom =  $requestData['nom'];
-            $traitant->dateNaissance =$requestData['dateNaissance'];
-            $traitant->motpass = $requestData['motpass'];
-            $traitant->email = $requestData['email'];
-            $traitant->numTel =$requestData['numTel'];
-            $traitant->address = $requestData['address'];
-            $traitant->specialiste =$requestData['specialiste'];
-            $user->traitants()->save( $traitant);
-        }
 
+        $data = $request->all();
+        $mail = DB::table('users')->pluck('email')->toArray();
+        if(isset($mail,$data['email'])){
+            // EMAIL found
+            return redirect()->route('admin.traitants.create')->with('success','البريد الالكتروني مستخدم من قبل يرجى تغييره');
 
+        }
+        else {
+            if ($request->image->getClientOriginalName()) {
+                $ext = $request->image->getClientOriginalExtension();
+                $file = date('YmdHis') . rand(1, 99999) . '.' . $ext;
+                $request->image->storeAs('public/traitants', $file);
+            } else {
+                $file = '';
+            }
+            $names[0] = $request->prenom;
+            $names[1] = $request->nom;
+            $user->name = implode(" ", $names);
+            $user->email = $request->email;
+            $user->image = $file;
+            $user->password = Hash::make($request->motpass);
+            $user->usertype = "traitant";
+            $user->save();
+            $requestData = $request->all();
+
+            for ($i = 1; $i <= 1; $i++) {
+                $traitant = new Traitant();
+                $traitant->image = $file;
+                $traitant->prenom = $requestData['prenom'];
+                $traitant->nom = $requestData['nom'];
+                $traitant->dateNaissance = $requestData['dateNaissance'];
+                $traitant->motpass = $requestData['motpass'];
+                $traitant->email = $requestData['email'];
+                $traitant->numTel = $requestData['numTel'];
+                $traitant->address = $requestData['address'];
+                $traitant->specialiste = $requestData['specialiste'];
+                $user->traitants()->save($traitant);
+            }
+            return redirect()->route('admin.traitants.index')->with('success','تمت عملية الاضافة بنجاح ');
+
+        }
         //Session::flash('success', 'تمت عملية الاضافة بنجاح ');
-        return redirect()->route('admin.traitants.index')->with('success','تمت عملية الاضافة بنجاح ');
 
     }
 

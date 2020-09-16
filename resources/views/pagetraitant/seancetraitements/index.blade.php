@@ -29,7 +29,7 @@
                         <tr class="ui-widget-content"  data-href="{{route('pagetraitant.show2',$c->id_enfant)}}" style="cursor: pointer;">
 
 
-                            <td  >{{$loop->iteration}}</td>
+                            <td  >{{$c->id_enfant}}</td>
 
                             <td><img src="{{ asset('storage/enfants/'.$c->image) }}"  style="border-radius: 8px; display: block;
                                      margin-left: auto;

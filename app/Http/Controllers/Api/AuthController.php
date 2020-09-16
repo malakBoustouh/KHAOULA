@@ -14,6 +14,7 @@ namespace App\Http\Controllers\Api;
     use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class AuthController extends Controller
 {
+    public $successStatus = 200;
     public function login(Request $request){
         $creds = $request->only(['email','password']);
 
@@ -21,7 +22,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'invalid credintials'
+                'result' => 'invalid credintials'
             ]);
         }
         return response()->json([

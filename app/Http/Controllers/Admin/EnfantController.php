@@ -6,6 +6,7 @@ use App\Parentt;
 use App\Traitant;
 use App\User;
 use Carbon\Carbon;
+use DB;
 use Cassandra\FutureRows;
 use Cassandra\Rows;
 use Illuminate\Http\Request;
@@ -46,12 +47,11 @@ class EnfantController extends Controller
 
         return view('admin.enfants.create')->with($arr);
     }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request,Enfant $enfant,Parentt $parentt,User $user)
     {
@@ -63,7 +63,14 @@ class EnfantController extends Controller
                 'numTel2'=>'required', 'lieuTravail2'=>'required','niveauEduc2'=>'required','nom2'=>'required'
                 )
         );
-       // dd($request->all());
+        $data = $request->all();
+        $mail = DB::table('users')->pluck('email')->toArray();
+        //dd($user);
+        if(isset($mail,$data['email'])) {
+            return redirect()->route('admin.enfants.create')->with('success','البريد الالكتروني مستخدم من قبل يرجى تغييره');
+
+        }
+        else{
         if($request->imageChild->getClientOriginalName()){
             $ext =  $request->imageChild->getClientOriginalExtension();
             $file = date('YmdHis').rand(1,99999).'.'.$ext;
@@ -86,7 +93,6 @@ class EnfantController extends Controller
 
         $enfant->save();
         $requestData=$request->all();
-
         for($i=1;$i<=2;$i++){
             $parentts=new Parentt(); $users=new User();
 
@@ -124,7 +130,7 @@ class EnfantController extends Controller
 
 
 
-        return redirect()->route('admin.enfants.index')->with('success','تمت عملية الاضافة بنجاح ');
+        return redirect()->route('admin.enfants.index')->with('success','تمت عملية الاضافة بنجاح ');}
     }
     /**
      * Display the specified resource.
@@ -138,7 +144,6 @@ class EnfantController extends Controller
         $parentt = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id',$id_enfant)->first();
         $firs=$parentt->id_parentt;
         $parent = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.id_parentt',$firs+1)->first();
-
         //CALCUATE AGE Enfant
         $dateNaiss= $enfant->dateNaissance;
         $calculeAgeEnf=Carbon::parse($dateNaiss)->age;
@@ -147,7 +152,6 @@ class EnfantController extends Controller
         $calculeAgePere=Carbon::parse($dateNaissP)->age;
         //CALCUATE AGE mere
         $dateNaissM= $parent->dateNaissancep;
-
         $calculeAgeMere=Carbon::parse($dateNaissM)->age;
 
         return view('admin.enfants.show')->with( compact('calculeAgeMere','calculeAgePere','calculeAgeEnf','parentt','parent','enfant'));

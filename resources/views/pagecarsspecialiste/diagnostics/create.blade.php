@@ -1265,7 +1265,8 @@
 
                         <button type="submit" class="result" value="Submit">المجموع</button>
                         <input type="text" name="points" id="points" disabled />
-                        <button type="submit" id="degree" class="saveresult" value="Submit"> حفظ</button>
+                        <button type="submit" id="degree" value="Submit">عرض النتيجة</button>
+                        <button type="submit" id="saveresult" class="saveresult" value="Submit"> حفظ</button>
                     </div>
                 </div>
             </div>
@@ -1438,9 +1439,11 @@
                 }
             }
 
+
+        });
+        $('#saveresult').click(function() {
             submitForm();
         });
-
         function submitForm() {
 
             var responses =[];
@@ -1595,10 +1598,6 @@
 
     <!-- select-->
     <!-- jQuery UI 1.11.4 -->
-    <script src="{{asset('https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')}}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{asset('dist/js/adminlte.js')}}"></script>
-
 
 
 @endsection

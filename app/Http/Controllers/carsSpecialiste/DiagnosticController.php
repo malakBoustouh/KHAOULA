@@ -6,6 +6,7 @@ use App\Detail;
 use App\Enfant;
 use App\Carsspecialiste;
 use App\Diagnostic;
+use App\Notification;
 use App\Parentt;
 use DB;
 use PDF;
@@ -66,16 +67,13 @@ class DiagnosticController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function store(Request $request, Diagnostic $diagnostic, Detail $detail)
+    public function store(Request $request, Detail $detail)
     {
         if (isset($request)) {
-            $nomid = $request->enf_id;
             $prenomid = $request->enfant_id;
-            $dateid = $request->enfa_id;
             $nomSpecialiste = Auth::user()->name;
             $nomSpecialiste = User::where('name', 'LIKE', '%' . $nomSpecialiste . '%')->first();
             $iduser = $nomSpecialiste->id;
-
             $specialiste = Carsspecialiste::join('users', 'users.id', 'carsspecialistes.user_id')->where('carsspecialistes.user_id', $iduser)->first();
             $idSp = $specialiste->id_carsspecialiste;
             $diagnostic = Diagnostic::create([
@@ -86,6 +84,17 @@ class DiagnosticController extends Controller
                 "remarque" => $request->remarque15,
                 "niveau" => $request->autismresult
             ]);
+            $parent = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id',$prenomid)->get();
+
+            for ($i = 1; $i <=2; $i++) {
+                $notificationTraites = new Notification();
+                $notificationTraites->parentt_id =$parent->get($i-1)->id_parentt;
+                $notificationTraites->etat = 1;
+                $notificationTraites->detail = "يمكنك الاطلاع على تفاصيل التشخيص الجديد";
+                $notificationTraites->dateNot = $request->date;
+                $notificationTraites->result = $request->autismresult;
+                $notificationTraites-> save( );
+            }
 
             $responses = json_decode($request->responses);
             $questions = json_decode($request->questions);
@@ -104,6 +113,9 @@ class DiagnosticController extends Controller
                 $details->questions = $question['value'];
                 $details->observations = $remarque['value'];
                 $diagnostic->detail()->save($details);
+
+
+
             }
 
             return redirect()->route('pagecarsspecialiste.affiche', $prenomid)->with(compact('detail'))->with('success', 'تمت اضافة التشخيص بنجاح ');
@@ -158,29 +170,30 @@ class DiagnosticController extends Controller
 
     public function affiche($id_enfant)
     {
-
         $arr['enfants'] = Enfant::all();
         $arr['diagnostics'] = Diagnostic::all();
         $arr['carsspecialistes'] = Carsspecialiste::all();
-        $enfant = Enfant::where('id_enfant', $id_enfant)->first();
-        $dateNaiss = $enfant->dateNaissance;
-
-        $dateActuelle = Carbon::now()->toDateString();
-        $diagnostic = Diagnostic::join('enfants', 'enfants.id_enfant', '=', 'diagnostics.enfant_id')->where('diagnostics.enfant_id', $id_enfant)->first();
-        // dd($diagnostic);
-        $parentt = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id', $id_enfant)->first();
-        $firs = $parentt->id_parentt;
-        $parent = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.id_parentt', $firs + 1)->first();
-
-        //$idcarsspecialiste=$diagnostic->carsspecialiste_id;
-        //$carsspecialiste = Carsspecialiste::where('id_carsspecialiste', $idcarsspecialiste)->first();
-
         $arr['parentts'] = Parentt::all();
         $arr['$diagnostics'] = Diagnostic::all();
-        $arr['enfants'] = Enfant::all();
+        //requete pour find l'enfant
+        $enfant = Enfant::where('id_enfant', $id_enfant)->first();
+        //pour calculer l'Age d'enfant
+        $dateNaiss = $enfant->dateNaissance;
+        $dateActuelle = Carbon::now()->toDateString();
         $calculeAge = Carbon::parse($dateNaiss)->age;
-        //dd($calculeAge);
-        return view('pagecarsspecialiste.diagnostics.affiche')->with(compact('calculeAge', 'parent', 'dateActuelle', 'enfant', 'parentt', 'diagnostic', 'carsspecialiste', 'dateActuelle'))->with($arr);
+
+        $diagnostic = Diagnostic::join('enfants', 'enfants.id_enfant', '=', 'diagnostics.enfant_id')->where('diagnostics.enfant_id', $id_enfant)->get();
+       //dd( $diagnostic);
+        //$superviseur = Carsspecialiste::join('diagnostics', 'Carsspecialiste.id', '=', 'carsspecialistes.carsspecialiste_id')->where('carsspecialistes.carsspecialiste_id', $iduser)->first();
+
+
+        //parent1
+        $parentt = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id', $id_enfant)->first();
+        $firs = $parentt->id_parentt;
+        //parent2
+        $parent = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.id_parentt', $firs + 1)->first();
+        return view('pagecarsspecialiste.diagnostics.affiche')->with(compact('calculeAge', 'parent',
+            'dateActuelle', 'enfant', 'parentt', 'diagnostic', 'carsspecialiste', 'dateActuelle'))->with($arr);
     }
 
     public function storeAffiche(Request $request, Diagnostic $diagnostic)

@@ -14,6 +14,8 @@
 
 
 Auth::routes();
+
+
 Route::get('/', function () {
         return view('welcome');
     });
@@ -46,12 +48,7 @@ Route::resource('/pagecarsspecialiste/parentts','carsSpecialiste\ParenttControll
 Route::get('/pagecarsspecialiste/diagnostics/create', 'carsSpecialiste\DiagnosticController@create')->name('pagecarsspecialiste');
 Route::get('/pagecarsspecialiste/diagnostics/affiche/{id_enfant}', 'CarsSpecialiste\DiagnosticController@affiche')->name('pagecarsspecialiste.affiche');
 Route::get('/pagecarsspecialiste/diagnostics/show/{id}', 'carsSpecialiste\DiagnosticController@show')->name('pagecarsspecialiste.show');
-//Route::post('/pagecarsspecialiste/diagnostics/storeAffiche', 'carsSpecialiste\DiagnosticController@storeAffiche')->name('pagecarsspecialiste.storeAffiche');
-//Route::get('/pagecarsspecialiste/diagnostics/action', 'carsSpecialiste\DiagnosticController@action')->name('live_search.action');
-//Route::get('/pagecarsspecialiste/diagnostics/pdf', 'carsSpecialiste\DiagnosticController@pdf');
 Route::post('/pagecarsspecialiste/update/{idDiagnostic}', 'carsSpecialiste\DiagnosticController@update');
-//Route::post('/pagecarsspecialiste/update/{idDiagnostic}', 'carsSpecialiste\DiagnosticController@update');
-
 Route::resource('/pagecarsspecialiste/diagnostics','carsSpecialiste\DiagnosticController',['as'=>'pagecarsspecialiste']);
 Route::post('/pagecarsspecialiste/diagnostics/store', 'carsSpecialiste\DiagnosticController@store');
 Route::post('/pagecarsspecialiste/diagnostics/storeAffiche', 'carsSpecialiste\DiagnosticController@storeAffiche');
@@ -74,16 +71,18 @@ Route::get('/pagetraitant/seancetraitements/show2/{id_enfant}', 'Traitant\Seance
 Route::get('/pagetraitant/seancetraitements/traite/{id}', 'Traitant\SeancetraitementController@traite')->name('pagetraitant.traite');
 Route::get('/pagetraitant/seancetraitements/affihe/{idF}', 'Traitant\SeancetraitementController@affiche')->name('affiche');
 //Route::resource('pagetraitant','SeancetraitementController', array('only' => array('index','create','store','dossier')));
-Route::resource('/pagetraitant/seancetraitements','Traitant\SeancetraitementController',['as'=>'pagetraitant']);
-Route::resource('/pagetraitant/traitants','Traitant\TraitantsController',['as'=>'pagetraitant']);
 
+Route::resource('/pagetraitant/seancetraitements','Traitant\SeancetraitementController',['as'=>'pagetraitant']);
+Route::get('/notifications/{id}', 'Traitant\SeancetraitementController@notifications',['as'=>'pagetraitant']);
+
+Route::resource('/pagetraitant/traitants','Traitant\TraitantsController',['as'=>'pagetraitant']);
 //Route::resource('/pagetraitant/seancetraitements','Traitant\SeancetraitementController',['as'=>'pagetraitant']);
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////Route::get('/admin/addchild', 'HomeController@index');
 //});
 //Route::get('/addchild', 'AddchildController@index');
 /////*********************************login*****************************************
-Route::view('/', 'home')->name('index');
+Route::view('/', 'auth.login')->name('index');
 
 Route::get('contact', 'ContactFormController@create')->name('contact.create');
 Route::post('contact', 'ContactFormController@store')->name('contact.store');

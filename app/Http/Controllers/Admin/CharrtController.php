@@ -42,7 +42,6 @@ class CharrtController extends Controller
             $arrayMethode[++$key] = [$value->methode, $value->number];
         }
 
-
         /*pie chart female*/
         $data_female = \App\Diagnostic::join('enfants', 'diagnostics.enfant_id', '=', 'id_enfant')
             ->selectRaw("niveau As female,count(*) as number")
@@ -66,8 +65,6 @@ class CharrtController extends Controller
         {
             $armale[++$key] = [$value->male, $value->number];
         }
-
-
 
        /* $visitor = DB::table('visitor')
             ->select(
@@ -102,6 +99,7 @@ class CharrtController extends Controller
             ->select( DB::raw("year(created_at) as year"),
                 DB::raw('count(*) as num')
                 )
+            ->orderby(DB::raw("year(created_at)"),'asc')
             ->groupBy(DB::raw("year(created_at)"))
             ->get();
 

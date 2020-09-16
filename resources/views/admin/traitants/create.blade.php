@@ -19,6 +19,11 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="card card-default">
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-danger">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
                     <form  method="post" action="{{route('admin.traitants.store')}}" enctype="multipart/form-data" >
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <!-- /.card-header -->
@@ -171,10 +176,6 @@
         });
     </script>
     <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.js"></script>
+
 
 @endsection

@@ -76,11 +76,8 @@ class ExerciceController extends Controller
      */
     public function update(Request $request)
     {
-        //dd($request->all());
         $exercice = Exercice::findOrFail($request->category_id);
-
         $exercice->update($request->all());
-
         return back();
     }
 

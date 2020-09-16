@@ -6,6 +6,8 @@ use App\Carsspecialiste;
 use App\Detail;
 use App\Diagnostic;
 use App\Enfant;
+use App\Notification;
+use App\Notificationtrait;
 use App\Parentt;
 use App\Pratique;
 use App\Remarque;
@@ -38,6 +40,8 @@ class SeancetraitementController extends Controller
         $seancetraitement = Seancetraitement::select('enfant_id')->join('enfants', 'enfants.id_enfant', '=', 'seancetraitements.enfant_id')->GROUPBY('enfant_id')->get();
         $arr['seancetraitements']=Seancetraitement::all();
         $arr['enfants']=Enfant::paginate(5);
+        $arr['notificationtraits']=Notificationtrait::all();
+
         return view('pagetraitant.seancetraitements.index')->with($arr) ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -64,27 +68,19 @@ class SeancetraitementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request ,Seancetraitement $seancetraitement)
+    public function store(Request $request ,Seancetraitement $seancetraitement,Notification $notificationTraites)
     {
        $this->validate($request,
             array(
                 'enfant_id'=>'required',
-                'enf_id'=>'required',
                 'duree'=>'required'
                 )
         );
 
-       // dd($request->all());
-        $nomid=$request->enf_id;
         $prenomid=$request->enfant_id;
-        if($nomid==$prenomid){
         $seancetraitement->enfant_id= $prenomid;
-            //$nomTraitant = explode(' ',  Auth::user()->name, 2); // Restricts it to only 2 values, for names like Billy Bob Jones
-           // $last_name = $nomTraitant[0];
-           // $first_name = !empty($nomTraitant[1]) ? $nomTraitant[1] : '';
             $nomTraitant= Auth::user()->name;
             $nomSpecialiste = User::where('name', 'LIKE', '%'.$nomTraitant.'%') ->first();
-
             $iduser= $nomSpecialiste->id;
             $traitant = Traitant::join('users', 'users.id', '=', 'traitants.user_id')->where('traitants.user_id',$iduser)->first();
             $idTrait= $traitant->id_traitant;
@@ -94,7 +90,6 @@ class SeancetraitementController extends Controller
             $seancetraitement->methode=$request->methode;
             if($request->commentaire==""){
                 $seancetraitement->commentaire="لاتوجد";
-
             }else  {
                 $seancetraitement->commentaire=$request->commentaire;
            }
@@ -113,14 +108,22 @@ class SeancetraitementController extends Controller
             }else  {
                 $seancetraitement->description=$request->description;
             }
+            //RECHERCHE L'ID DES PARENTT
 
+
+            $parent = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id',$iduser)->get();
             $seancetraitement->save();
-            return redirect()->route('pagetraitant.show2',$seancetraitement->enfant_id)->with('success','تمت عملية الاضافة بنجاح ');
 
-        }
-        else{
-            return redirect()->route('pagetraitant.seancetraitements.create')->with('success','خطأ في تحديد الاسم او اللقب ');
-        }
+            for ($i = 1; $i <=2; $i++) {
+                $notificationTraites = new Notification();
+                $notificationTraites->parentt_id =$parent->get($i-1)->id_parentt;
+                $notificationTraites->etat = 1;
+                $notificationTraites->detail = "يمكنك الاطلاع على تفاصيل الحصة الجديدة";
+                $notificationTraites->dateNot = $request->dateTraite;
+               $notificationTraites-> save( );
+            }
+
+            return redirect()->route('pagetraitant.show2',$seancetraitement->enfant_id)->with('success','تمت عملية الاضافة بنجاح ');
 
     }
 
@@ -174,7 +177,6 @@ class SeancetraitementController extends Controller
         $calculeAge=Carbon::parse($enfant->dateNaissance);
         $age=$calculeAge->age;
         $parentt = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id',$id_enfant)->first();
-
         return view('pagetraitant.seancetraitements.edit')->with(compact('enfant','parentt','seancetraitement','age'))->with($arr);
     }
 
@@ -188,11 +190,14 @@ class SeancetraitementController extends Controller
      */
     public function update(Request $request, Seancetraitement $seancetraitement)
     {
-        $nomid=$request->enf_id;
-        $prenomid=$request->enfant_id;
-
+            $prenomid=$request->enfant_id;
             $seancetraitement->enfant_id= $prenomid;
-            $seancetraitement->traitant_id=1;
+           $nomTraitant= Auth::user()->name;
+           $nomTraitant = User::where('name', 'LIKE', '%'.$nomTraitant.'%') ->first();
+            $iduserTraitant= $nomTraitant->id;
+            $traitant = Traitant::join('users', 'users.id', 'traitants.user_id')->where('traitants.user_id', $iduserTraitant)->first();
+            $id_traitant = $traitant->id_traitant;
+            $seancetraitement->traitant_id=$id_traitant;
             $seancetraitement->dateTraite=$request->dateTraite;
             $seancetraitement->methode=$request->methode;
             $seancetraitement->commentaire=$request->commentaire;
@@ -200,7 +205,7 @@ class SeancetraitementController extends Controller
             $seancetraitement->duree=$request->duree;
             $seancetraitement->note=$request->note;
             $seancetraitement->description=$request->description;
-        $seancetraitement->save();
+            $seancetraitement->save();
         return redirect()->route('pagetraitant.show2',$seancetraitement->enfant_id)->with('success','تمت عملية التعديل بنجاح ');
     }
 
@@ -234,11 +239,18 @@ class SeancetraitementController extends Controller
         $calculeAge=Carbon::parse($enfant->dateNaissance);
         $age=$calculeAge->age;
         $dateActuelle=Carbon::now()->toDateString();
-        $seancetraitement = Seancetraitement::join('enfants', 'enfants.id_enfant', '=', 'seancetraitements.enfant_id')->where('seancetraitements.enfant_id',$id_enfant)->first();
+        $seancetraitement = Seancetraitement::join('enfants', 'enfants.id_enfant', '=', 'seancetraitements.enfant_id')
+            ->where('seancetraitements.enfant_id',$id_enfant)->first();
         $diagnostic = Diagnostic::join('enfants', 'enfants.id_enfant', '=', 'diagnostics.enfant_id')->where('diagnostics.enfant_id',$id_enfant)->first();
         $parentt= Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id',$id_enfant)->first();
         $firs=$parentt->id_parentt;
-        $remarque= Remarque::join('parentts', 'parentts.id_parentt', '=', 'remarques.parentt_id')->where('parentts.id_parentt',$firs)->first();
+
+        $remarque= Remarque::join('parentts', 'parentts.id_parentt', '=', 'remarques.parentt_id')->where('parentts.id_parentt',$firs)
+            ->Orwhere('parentts.id_parentt',$firs+1)->get();
+        foreach($remarque as $remarque )
+        {
+         $remarque->dateRemarque;$remarque->detail;
+        }
         $parent = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.id_parentt',$firs+1)->first();
         $arr['traitants']=Traitant::all();
         $arr['remarques']=Remarque::all();
@@ -252,7 +264,7 @@ class SeancetraitementController extends Controller
 
                 DB::raw('Month(created_at)as month' ))
             ->where('enfant_id','=',$id_enfant)
-
+              ->orderby( DB::raw('Month(created_at)'),'asc')
             ->get();
         //$k= date("F", mktime(0, 0, 0, date, 1));
         $array[] = ['', 'تقييم'];
@@ -283,7 +295,7 @@ class SeancetraitementController extends Controller
         }
 
 
-        return view('pagetraitant.seancetraitements.show2')->with(compact('enfant','remarque','parent','parentt','seancetraitement','diagnostic','specialiste','age','dateActuelle'))->with($arr)->with('month', json_encode($array))->with('datejanvier', json_encode($arraydatejanvier));
+        return view('pagetraitant.seancetraitements.show2')->with(compact('enfant','remarque','parent','parentt','seancetraitement','diagnostic','specialiste','age','dateActuelle'))->with($arr)->with('month', json_encode($array))->with('datejanvier', json_encode($arraydatejanvier)) ;
     }
 
 
@@ -1607,5 +1619,100 @@ class SeancetraitementController extends Controller
             $arraydatedecember[++$key] = [(string)$value->datedecember,(int) $value->sums];
         }
         return view('pagetraitant.seancetraitements.quiz.quizFruits',compact('enfant'))->with('date', json_encode($array))->with('datejanvier', json_encode($arraydatejanvier))->with('datefivrier', json_encode($arraydatefivrier))->with('datemars', json_encode($arraydatemars))->with('dateavril', json_encode($arraydateavril))->with('datemai', json_encode($arraydatemai))->with('datedecember', json_encode($arraydatedecember))->with('datenovember', json_encode($arraydatenovember))->with('dateoctober', json_encode($arraydateoctober))->with('dateseptember', json_encode($arraydateseptember));
+    }
+
+
+    public function notifications($id) {
+
+        $uid = Auth::user()->id;
+
+        $remarque = DB::table('notificationtraits')
+            ->leftJoin('traitants', 'id_traitant', 'notificationtraits.traitant_id')
+            ->where('notificationtraits.id', $id)
+            ->where('traitants.user_id',  $uid)
+            ->orderBy('notificationtraits.created_at', 'desc')
+            ->get();
+        $updateNoti = DB::table('notificationtraits')
+            ->where('notificationtraits.id', $id)
+            ->update(['etat' => 0]);
+        //trouver enfant
+        $parent = Notificationtrait::where('id',$id)->first();
+        $idparent=$parent->parentt_id;
+       // $enfparent = Enfant::join('parentts', 'parentts.id_enfant', '=', 'enfants.enfant_id')->get();
+//        $enfparent = Enfant::join('parentts', 'parentts.enfant_id', '=', 'enfants.id_enfant')->where('parentts.id_parentts',$idparent)->get();
+
+        $enfparent = Parentt::where('id_parentt',$idparent)->first();
+
+
+        $id_enfant=$enfparent->enfant_id;
+//************************************************************************
+        $enfant = Enfant::where('id_enfant',$id_enfant)->first();
+
+        $calculeAge=Carbon::parse($enfant->dateNaissance);
+        $age=$calculeAge->age;
+        $dateActuelle=Carbon::now()->toDateString();
+        $seancetraitement = Seancetraitement::join('enfants', 'enfants.id_enfant', '=', 'seancetraitements.enfant_id')
+            ->where('seancetraitements.enfant_id',$id_enfant)->first();
+        $diagnostic = Diagnostic::join('enfants', 'enfants.id_enfant', '=', 'diagnostics.enfant_id')->where('diagnostics.enfant_id',$id_enfant)->first();
+        $parentt= Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.enfant_id',$id_enfant)->first();
+        $firs=$parentt->id_parentt;
+
+        $remarque= Remarque::join('parentts', 'parentts.id_parentt', '=', 'remarques.parentt_id')->where('parentts.id_parentt',$firs)
+            ->Orwhere('parentts.id_parentt',$firs+1)->get();
+        foreach($remarque as $remarque )
+        {
+            $remarque->dateRemarque;$remarque->detail;
+        }
+        $parent = Parentt::join('enfants', 'enfants.id_enfant', '=', 'parentts.enfant_id')->where('parentts.id_parentt',$firs+1)->first();
+        $arr['traitants']=Traitant::all();
+        $arr['remarques']=Remarque::all();
+        $arr['carsspecialistes']=Carsspecialiste::all();
+        $arr['parentts']=Parentt::all();
+        //********************************************************chart
+        //chart  month
+        $data = DB::table('seancetraitements')
+            ->select(
+                DB::raw('note as sums'),
+
+                DB::raw('Month(created_at)as month' ))
+            ->where('enfant_id','=',$id_enfant)
+            ->orderby( DB::raw('Month(created_at)'),'asc')
+            ->get();
+        //$k= date("F", mktime(0, 0, 0, date, 1));
+        $array[] = ['', 'تقييم'];
+        foreach($data as $key => $value)
+        {
+
+            $array[++$key] = [(string)$value->month,(int) $value->sums];
+        }
+
+//DATE_FORMAT(created_at,'%M')as date
+
+        //chart janfier
+        $datadatejanvier = DB::table('seancetraitements')
+            ->select(
+                DB::raw('note as sums'),
+
+                DB::raw("DATE_FORMAT(created_at,'%D')as datejanvier"))
+            ->where('enfant_id','=',$id_enfant)
+            ->where( DB::raw('Month(created_at)' ),'=','1' )
+
+            ->get();
+        //$k= date("F", mktime(0, 0, 0, date, 1));
+        $arraydatejanvier[] = ['شهر جانفي', 'تقييم'];
+        foreach($datadatejanvier as $key => $value)
+        {
+
+            $arraydatejanvier[++$key] = [(string)$value->datejanvier,(int) $value->sums];
+        }
+
+       // $three_minutes_ago = Carbon::now()->subMinutes(3)->toDateTimeString();
+      /*  $foo = Notificationtrait::where('traitant_id',1)->first();
+        dd($foo ->created_at);
+        $m=$three_minutes_ago - $foo ->created_at;
+dd($m);*/
+        return view('pagetraitant.seancetraitements.notifications')->with(compact('enfant','remarque','parent','parentt','seancetraitement','diagnostic','specialiste','age','dateActuelle'))->with($arr)->with('month', json_encode($array))->with('datejanvier', json_encode($arraydatejanvier)) ;
+
+        //return view('profile.notifcations', compact('notes'));
     }
 }

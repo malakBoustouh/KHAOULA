@@ -27,12 +27,11 @@
     <link rel="stylesheet" href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css')}}">
     <!-- CLICKABLE -->
 
-    <style>
-        img {
-            border-radius: 50%;
-        }
-    </style>
-<!-- confirm delete!-->
+
+    <!-- confirm delete!-->
+
+
+
 
 </head>
 <body class="hold-transition sidebar-mini">
@@ -146,7 +145,6 @@
                                 <i class="nav-icon fa fa-pie-chart"></i>
                                 <p>
                                     احصائيات
-                                    <i class="right fa fa-angle-left"></i>
                                 </p>
                             </a>
 
@@ -155,7 +153,6 @@
                                 <i class="fa fa-caret-square-o-right"></i>
                                 <p>
                                     التطبيقات
-                                    <span class="badge badge-info right">2</span>
                                 </p>
                             </a>
                         </li>
@@ -186,25 +183,7 @@
     <div class="content-wrapper">
         @include('partials._messages')
         @yield('content')
-        <br>
-        <br>
-        <br>
-        <br> <br>
-        <br>
-        <br>
-        <br> <br>
-        <br>
-        <br>
-        <br> <br>
-        <br>
-        <br>
-        <br> <br>
-        <br>
-        <br>
-        <br> <br>
-        <br>
-        <br>
-        <br>
+
         @include('partials._footer')
     </div>
 </div>
@@ -229,6 +208,12 @@
     })
 </script>
 </body>
+<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src="{{asset('https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('dist/js/adminlte.js')}}"></script>
 </html>
 
 

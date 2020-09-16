@@ -31,18 +31,14 @@ protected function redirectTo(){
     if(Auth::user()->usertype=='admin'){
         return '/admin';
     }
-    else{
-        if(Auth::user()->usertype=='specialiste'){
-            return('/pagecarsspecialiste');
-        }
-        else{
-            if(Auth::user()->usertype=='traitant'){
-                return('/pagetraitant');
+    else {
+        if (Auth::user()->usertype == 'specialiste') {
+            return ('/pagecarsspecialiste');
+        } else {
+            if (Auth::user()->usertype == 'traitant') {
+                return ('/pagetraitant');
             }
         }
-
-
-        ///pagespecialiste/diagnostics
     }
 }
     /**

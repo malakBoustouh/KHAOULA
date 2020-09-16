@@ -41,11 +41,7 @@
     <!-- khaoula jequery -->
 
     <!-- khaoula jequery -->
-    <style>
-        img {
-            border-radius: 50%;
-        }
-    </style>
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -64,11 +60,11 @@
 
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
+                    <div class="image" id="image">
                         @if(\Illuminate\Support\Facades\Auth::user()->image)
-                            <img src="{{ asset('storage/specialistes/'.\Illuminate\Support\Facades\Auth::user()->image) }}" alt="Avatar" style="width:70px;height: 50px"/>
+                            <img src="{{ asset('storage/specialistes/'.\Illuminate\Support\Facades\Auth::user()->image) }}"  alt="Avatar" style="width:50px;height: 50px;border-radius: 50%;"/>
                         @else
-                        <img src="{{ asset('dist/img/spec.png') }}">
+                                <img src="{{ asset('dist/img/admin.png') }}">
                             @endif
                     </div>
 
@@ -133,27 +129,16 @@
         <!-- Content Header (Page header) -->
         @include('partials._messages')
         @yield('content')
-        <br>
-        <br>
-        <br>
-        <br> <br>
-        <br>
-        <br>
-        <br><br>
-        <br>
-        <br>
-        <br> <br>
-        <br>
-        <br>
-        <br><br>
-        <br>
-        <br>
-        <br> <br>
-        <br>
-        <br>
-        <br>
+
         @include('partials._footer')
     </div>
 </div>
 </body>
+<script src="{{asset('https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('dist/js/adminlte.js')}}"></script>
+
+<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+<!-- jQuery UI 1.11.4 -->
+
 </html>

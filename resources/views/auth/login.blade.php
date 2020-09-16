@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html>
+<html >
 <head>
     <title>تسجيل الدخول</title>
     <meta charset="UTF-8">
@@ -52,8 +52,6 @@
 
                 </div>
                 <br>
-
-
                 <div data-validate="يرجى إدخال كلمة المرور  ">
                     <input  id="mypassword" placeholder="كلمة المرور"  type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" style="height: 80px;width: 445px;border-radius: 40px; background-color: #f7f7f7;" >
                     @if ($errors->has('password'))

@@ -49,7 +49,14 @@ class CarsspecialisteController extends Controller
                 'numTel'=>'required', 'address'=>'required',
                 'specialite'=>'required')
         );
+        $data = $request->all();
+        $mail = DB::table('users')->pluck('email')->toArray();
+        //dd($user);
+        if(isset($mail,$data['email'])) {
+            return redirect()->route('admin.carsSpecialistes.create')->with('success','البريد الالكتروني مستخدم من قبل يرجى تغييره');
 
+        }
+        else{
         if($request->imagespecialiste->getClientOriginalName()){
             $ext =  $request->imagespecialiste->getClientOriginalExtension();
             $file = date('YmdHis').rand(1,99999).'.'.$ext;
@@ -81,7 +88,7 @@ class CarsspecialisteController extends Controller
         $specialiste->specialite=$request->specialite;
             $user->carsspecialistes()->save( $specialiste);}
         //Session::flash('success', 'تمت عملية الاضافة بنجاح ');
-        return redirect()->route('admin.carsSpecialistes.index')->with('success','تمت عملية الاضافة بنجاح ');
+        return redirect()->route('admin.carsSpecialistes.index')->with('success','تمت عملية الاضافة بنجاح ');}
 
     }
 
@@ -94,7 +101,7 @@ class CarsspecialisteController extends Controller
     public function show($id_carsspecialiste)
     {
         $carsspecialiste = Carsspecialiste::find($id_carsspecialiste);
-        //CALCUATE AGE Enfant
+        //calculer age specialiste
         $dateNaiss= $carsspecialiste->dateNaissance;
         $calculeAgeSpc=Carbon::parse($dateNaiss)->age;
         return view('admin.carsSpecialistes.show', compact('carsspecialiste','calculeAgeSpc'));
@@ -138,7 +145,6 @@ class CarsspecialisteController extends Controller
             else
                 $file = $carsspecialiste->image;
         }
-
         $carsspecialiste->image=$file;
         $carsspecialiste->prenom=$request->prenom;
         $carsspecialiste->nom=$request->nom;
@@ -172,8 +178,6 @@ class CarsspecialisteController extends Controller
         $userTraitant=$traitant->user_id;
         $Usertraitant =User::findOrFail( $userTraitant);
         $Usertraitant->delete(); $traitant->delete();
-
-        //session()->flash('notif''Succes to save');
         return redirect()->route('admin.carsSpecialistes.index')->with('success','تمت عملية الحذف بنجاح ');
     }
 }

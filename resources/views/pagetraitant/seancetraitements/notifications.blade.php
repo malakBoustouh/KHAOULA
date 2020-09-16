@@ -184,9 +184,9 @@
                                     </div>
                                 </div>
                                 <ul class="nav nav-pills">
-                                    <li class="nav-item"><a class="nav-link active" href="#prise" data-toggle="tab"> حصص المعالجة</a></li>
+                                    <li class="nav-item"><a class="nav-link " href="#prise" data-toggle="tab"> حصص المعالجة</a></li>
                                     <li class="nav-item"><a class="nav-link " href="#diagnostic" data-toggle="tab">التشخيص</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#remarque" data-toggle="tab">ملاحظات الاباء</a></li>
+                                    <li class="nav-item"><a class="nav-link active" href="#remarque" data-toggle="tab">ملاحظات الاباء</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#statistique" data-toggle="tab">احصائيات</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#traite" data-toggle="tab" >إضافة حصة معالجة</a></li>
 
@@ -207,36 +207,36 @@
                                                             <p>{{ $message }}</p>
                                                         </div>
                                                     @endif
-                                                        <table class="table table-hover">
-                                                            <tr>
-                                                                <th>التاريخ</th>
-                                                                <th>المختص(ة)</th>
-                                                                <th>المشرف(ة)</th>
-                                                                <th>النتيجة</th>
-                                                            </tr>
-                                                            @if(count($diagnostic))
-                                                                @foreach($diagnostics as $h   )
-                                                                    @if($enfant->id_enfant==$h->enfant_id)
-                                                                        <tr class='clickable-row'  data-href="{{route('affiche',$h->id)}}"  style="cursor: pointer;">
-                                                                            <td>{{$h->dateDiagnostic}}</td>
-                                                                            @foreach($carsspecialistes as $t   )
-                                                                                @if($h->carsspecialiste_id==$t->id_carsspecialiste)
-                                                                                    <td value="{{$t->id_carsspecialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
-                                                                                @endif
-                                                                            @endforeach
-                                                                            @foreach($carsspecialistes as $t   )
-                                                                                @if($h->carsspecialiste_id==$t->id_carsspecialiste)
-                                                                                    <td value="{{$t->id_carsspecialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
-                                                                                @endif
-                                                                            @endforeach
-                                                                            <td>{{$h->niveau}}</td>
-                                                                        </tr>
-                                                                    @endif
-                                                                @endforeach
-                                                            @else
-                                                                <tr><td colspan="7">لا يوجد معالجة</td></tr>
-                                                            @endif
-                                                        </table>
+                                                    <table class="table table-hover">
+                                                        <tr>
+                                                            <th>التاريخ</th>
+                                                            <th>المختص(ة)</th>
+                                                            <th>المشرف(ة)</th>
+                                                            <th>النتيجة</th>
+                                                        </tr>
+                                                        @if(count($diagnostic))
+                                                            @foreach($diagnostics as $h   )
+                                                                @if($enfant->id_enfant==$h->enfant_id)
+                                                                    <tr class='clickable-row'  data-href="{{route('affiche',$h->id)}}"  style="cursor: pointer;">
+                                                                        <td>{{$h->dateDiagnostic}}</td>
+                                                                        @foreach($carsspecialistes as $t   )
+                                                                            @if($h->carsspecialiste_id==$t->id_carsspecialiste)
+                                                                                <td value="{{$t->id_carsspecialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
+                                                                            @endif
+                                                                        @endforeach
+                                                                        @foreach($carsspecialistes as $t   )
+                                                                            @if($h->carsspecialiste_id==$t->id_carsspecialiste)
+                                                                                <td value="{{$t->id_carsspecialiste}}">{{'الدكتور(ة)'}} {{ $t->prenom}} {{ $t->nom}}  </td>
+                                                                            @endif
+                                                                        @endforeach
+                                                                        <td>{{$h->niveau}}</td>
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            <tr><td colspan="7">لا يوجد معالجة</td></tr>
+                                                        @endif
+                                                    </table>
 
                                                 </div>
                                                 <!-- /.card-body -->
@@ -244,7 +244,7 @@
                                             <!-- /.card -->
                                         </div>
                                     </div>
-                                    <div class="active tab-pane" id="prise">
+                                    <div class=" tab-pane" id="prise">
                                         <div class="post">
                                             <div class="card">
                                                 <div class="card-body table-responsive p-0">
@@ -295,7 +295,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="remarque">
+                                    <div class="active tab-pane" id="remarque">
                                         <div class="post">
                                             <div class="card">
                                                 <div class="card-body table-responsive p-0">
@@ -311,11 +311,11 @@
                                                         @if(count($remarque))
 
 
-                                                                    <tr >
-                                                                        <td>{{ $remarque->dateRemarque}}</td>
-                                                                        <td>{{$remarque->detail}}</td>
+                                                            <tr >
+                                                                <td>{{ $remarque->dateRemarque}}</td>
+                                                                <td>{{$remarque->detail}}</td>
 
-                                                                    </tr>
+                                                            </tr>
 
                                                         @else
                                                             <tr><td colspan="7">لا توجد ملاحظة</td></tr>
@@ -333,12 +333,12 @@
                                             <br><br>
                                             <div class="row">
 
-                                                                <div class="col-md-6" >
-                                                                        <a  style="margin-right: 80px" href="{{route('charrt',$enfant->id_enfant)}}" class="btn btn-info" >احصائيات التطور في الحصص </a>
-
-                                                                </div>
                                                 <div class="col-md-6" >
-                                                                    <button  class="btn btn-info"  data-toggle="modal" data-target="#seance">احصائيات التطور في الالعاب التعليمية</button>
+                                                    <a  style="margin-right: 80px" href="{{route('charrt',$enfant->id_enfant)}}" class="btn btn-info" >احصائيات التطور في الحصص </a>
+
+                                                </div>
+                                                <div class="col-md-6" >
+                                                    <button  class="btn btn-info"  data-toggle="modal" data-target="#seance">احصائيات التطور في الالعاب التعليمية</button>
                                                 </div>
 
                                             </div>
@@ -478,17 +478,17 @@
                                                     </div>
                                                 </form></div>
 
-                                    </div>
-
-
-
-
-                                            </div>
                                         </div>
-                                    </div>
 
+
+
+
+                                    </div>
                                 </div>
                             </div>
+
+                        </div>
+                    </div>
 
 
 
@@ -503,18 +503,18 @@
                             <button type="button" style="margin-right: 370px;" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
 
-                           <br><br>
+                        <br><br>
                         <div class="modal-body">
                             <div class="panel-body" align="center">
-                                    <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizJobs',$enfant->id_enfant)}}"  >كويز المهن</a>
+                                <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizJobs',$enfant->id_enfant)}}"  >كويز المهن</a>
                                 <br><br>
-                            <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizAnimals',$enfant->id_enfant)}}" >كويز الحيوانات</a>
+                                <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizAnimals',$enfant->id_enfant)}}" >كويز الحيوانات</a>
                                 <br><br>
-                            <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizColors',$enfant->id_enfant)}}"  >كويز الالوان</a>
+                                <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizColors',$enfant->id_enfant)}}"  >كويز الالوان</a>
                                 <br><br>
-                            <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizFormes',$enfant->id_enfant)}}"  >كويز الاشكال</a>
+                                <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizFormes',$enfant->id_enfant)}}"  >كويز الاشكال</a>
                                 <br><br>
-                            <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizFruits',$enfant->id_enfant)}}"  >كويز الفواكه</a>
+                                <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizFruits',$enfant->id_enfant)}}"  >كويز الفواكه</a>
                                 <br><br>
                                 <a  class="btn  btn-success" style="width: 150px"  href="{{route('quizDirections',$enfant->id_enfant)}}"  >كويز الاتجاهات</a>
                                 <br><br>
@@ -533,7 +533,7 @@
             </div>
         </section></div>
 
-        <!-- /.content -->
+    <!-- /.content -->
 
 
     <!-- ./wrapper -->

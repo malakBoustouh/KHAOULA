@@ -155,9 +155,5 @@
     </script>
     <!-- jQuery -->
 
-    <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="{{asset('https://code.jquery.com/ui/1.12.1/jquery-ui.min.js')}}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{asset('dist/js/adminlte.js')}}"></script>
+
 @endsection

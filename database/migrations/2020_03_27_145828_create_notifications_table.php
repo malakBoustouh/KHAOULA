@@ -18,7 +18,8 @@ class CreateNotificationsTable extends Migration
             $table->unsignedBigInteger('parentt_id');
             $table->foreign('parentt_id')->references('id_parentt')->on('parentts')->onDelete('cascade');;
             $table->Date('dateNot')->nullable();
-            $table->string('etat')->nullable();
+            $table->string('result')->nullable();
+            $table->string('etat')->default(1);
             $table->string('detail')->nullable();
             $table->timestamps();
         });

@@ -34,7 +34,7 @@
 
 
                                     <div class="form-group">
-                                        <label>اللقب :</label>
+                                        <label>الاسم الكامل :</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-user"></i></span>
@@ -43,7 +43,7 @@
                                             <select   class="form-control" style="width: 461px" id="named" name="enfant_id" >
                                                 <option ></option>
                                                 @foreach($enfants as $enfant)
-                                                    <option  value="{{$enfant->id_enfant}}">{{$enfant->prenom}}</option>
+                                                    <option  value="{{$enfant->id_enfant}}">{{$enfant->prenom}} {{$enfant->nom}}</option>
                                                 @endforeach
                                             </select>
 
@@ -86,21 +86,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>الإسم :</label>
-                                        <div class="input-group" >
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-user"></i></span>
-                                            </div>
-                                            <select   style="width: 461px" id="nameid" name="enf_id" >
-                                                <option></option>
-                                                @foreach($enfants as $enf)
-                                                    <option value="{{$enf->id_enfant}}">{{$enf->nom}}</option>
-                                                @endforeach
-                                            </select>
 
-                                        </div>
-                                    </div>
                                     <div class="form-group">
 
                                         <label> مدة الحصة :</label>
@@ -177,9 +163,4 @@
 
     <!-- jQuery -->
 
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.js"></script>
 @endsection
